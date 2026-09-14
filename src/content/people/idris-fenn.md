@@ -15,6 +15,5 @@ contact:
 Idris spent ten years reviewing other people's code before he noticed the
 good reviews and the bad ones split on exactly the same line the rest of
 this course is about: specific and falsifiable, or vague and not. He leads
-the crits that need a technical eye --- code, peer review, and receiving
-notes --- and argues, more than anyone else in the room, that "this could be
+the crits that need a technical eye --- code and peer review --- and argues, more than anyone else in the room, that "this could be
 clearer" is not a sentence anyone is obliged to act on.
