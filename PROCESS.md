@@ -44,8 +44,9 @@ back cleanly to a plain heading when no hero image is supplied, so an
 absent photo isn't a corner cut, it's a considered choice about what this
 course's identity needs to carry.
 [`c392993`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-bada/commit/c392993)
-wrote the twelve weekly crits, each with its own `domain:` field feeding the
-coherence check above.
+wrote the twelve weekly crits, six with a `domain:` field feeding the
+coherence check above and six that retest the method on the course's own
+output instead of a new domain.
 [`821ad5f`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-bada/commit/821ad5f)
 added only six lectures against those twelve weeks, deliberately fortnightly
 rather than weekly: theory earns its place only where it feeds that week's
