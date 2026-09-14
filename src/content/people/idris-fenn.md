@@ -1,17 +1,20 @@
 ---
 title: Idris Fenn
 description:
-  A tutor working across the course's first reviews and the practical work that
-  follows them.
+  Tutor. A decade of code and design review before he started teaching the
+  same skill outside a pull request.
 affiliation: Slop University School of Invented Disciplines
 role: tutor
 email: idris.fenn@slop.university
-contact: Ask during sessions, or email when a question cannot wait until the next one.
-photo: ./idris-fenn.avif
-photoAlt: A stylised portrait of a person facing the viewer, flat gold and black shapes on warm cream, in a two-ink risograph print
+contact:
+  Ask in the crit first --- most questions turn out to be about a specific
+  piece of work, and the room is a better place to answer those than email.
+  Email for anything that genuinely can't wait until the next session.
 ---
 
-<!-- STARTER_CONTENT: replace this person entry, then remove this comment. -->
-
-Replace this entry. A second person makes the listing, role ordering and
-teacher-reference fields visible before you replace the cast with your own.
+Idris spent ten years reviewing other people's code before he noticed the
+good reviews and the bad ones split on exactly the same line the rest of
+this course is about: specific and falsifiable, or vague and not. He leads
+the crits that need a technical eye --- code, peer review, and receiving
+notes --- and argues, more than anyone else in the room, that "this could be
+clearer" is not a sentence anyone is obliged to act on.
