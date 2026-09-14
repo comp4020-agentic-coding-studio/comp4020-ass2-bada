@@ -4,7 +4,7 @@ description:
   One note, on one real piece of work, that has to survive the room
   breaking it before it survives a marker reading it.
 week: 6
-due: 2027-03-29T12:00:00+10:00
+due: 2027-04-05T12:00:00+10:00
 weight: 30
 marking:
   mode: weighted
@@ -22,6 +22,7 @@ spec:
   - the note states what would have to be true for it to be wrong
   - the note is aimed at the work, not at the person who made it
 related:
+  - lectures/week-03
   - lectures/week-05
 ---
 

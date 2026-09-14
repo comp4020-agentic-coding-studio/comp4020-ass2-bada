@@ -24,12 +24,20 @@ its final form. The discipline is to mark the sentence and only the
 sentence: not "you're vague," but "this clause doesn't say what changed, and
 here's the word doing the vague work."
 
+Call this third property care, alongside specificity and falsifiability from
+week 3: not gentleness, but precision about what the note is actually aimed
+at. A note can have both of the first two properties and still fail this
+one --- "you always overwrite" is specific enough to disprove and still
+lands on the person, not the choice.
+
 The same discipline runs backwards, in week 10: taking a note aimed
 correctly at the work as if it were aimed at you anyway is a different
 failure, on the receiving end of the same line.
 
 ## Outline
 
+- the third property: care, and why it's separate from specificity and
+  falsifiability
 - the tell: does the note's noun name a choice or a person
 - why prose makes this hardest, and code usually makes it easiest
 - keeping a note aimed at the work when the work and the person are hard to
