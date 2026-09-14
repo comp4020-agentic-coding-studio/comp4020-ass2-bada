@@ -1,8 +1,8 @@
 ---
 title: The Critique Portfolio
 description:
-  Five or six notes across five or six domains, plus an honest account of
-  where the method held and where it didn't.
+  Six notes across six domains, plus an honest account of where the method
+  held and where it didn't.
 week: 12
 due: 2027-05-17T12:00:00+10:00
 weight: 50
@@ -17,7 +17,8 @@ marking:
     read as an argument, not a collection.
 spec:
   - submitted by the deadline, in the format named below
-  - it includes at least one note per domain covered from weeks 3 through 9
+  - it includes at least one note per critique domain --- visual art, code,
+    prose, peer review, criticism-as-genre, and the brief itself
   - it names, specifically, the note in the portfolio you're least sure of,
     and why
   - it stands on its own, without you there to explain it
@@ -43,7 +44,7 @@ already done, week by week; this is the case for what it adds up to.
 
 ## What you submit
 
-One document: the six notes (or as many domains as you covered), each with
+One document: the six notes, each with
 the piece of work it was about named or linked, and a two-page argument
 that uses the notes as evidence for or against the semester's claim ---
 including, explicitly, your weakest note and what it shows.
