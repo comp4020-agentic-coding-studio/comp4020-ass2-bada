@@ -9,6 +9,8 @@ teachers:
   - marisol-quaye
   - idris-fenn
 domain: criticism-as-genre
+related:
+  - lectures/week-05
 spec:
   - your review is written for a reader who wasn't there, not for the
     person who made the thing

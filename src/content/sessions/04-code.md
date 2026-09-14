@@ -9,6 +9,8 @@ teachers:
   - marisol-quaye
   - idris-fenn
 domain: code
+related:
+  - lectures/week-03
 spec:
   - your review comment references a specific line or function, not "the
     approach"
