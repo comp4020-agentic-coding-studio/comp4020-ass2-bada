@@ -1,46 +1,59 @@
 ---
-title: Assignment 1
+title: The Note
 description:
-  The first piece of graded work — a placeholder brief showing the shape every
-  assessment page follows
+  One note, on one real piece of work, that has to survive the room
+  breaking it before it survives a marker reading it.
 week: 6
-due: 2027-04-12T12:00:00+10:00
-weight: 40
+due: 2027-03-29T12:00:00+10:00
+weight: 30
 marking:
   mode: weighted
   criteria:
-    - name: Response to the brief
-      weight: 60
-    - name: Quality of execution
+    - name: Specificity
       weight: 40
+    - name: Falsifiability
+      weight: 30
+    - name: Care
+      weight: 30
 spec:
   - submitted by the deadline, in the format named below
-  - it does the thing the brief asks for, and a reader can tell that it does
-  - the work is yours, with any assistance declared
+  - the note names a specific, locatable thing in a real piece of work you
+    did not make
+  - the note states what would have to be true for it to be wrong
+  - the note is aimed at the work, not at the person who made it
 related:
-  - final-project
+  - lectures/week-05
 ---
-
-<!-- STARTER_CONTENT: replace this assessment brief, then remove this comment. -->
-
-Replace this brief. An assessment page has three jobs: pose the problem, say
-what is submitted, and say how it is marked.
 
 ## The brief
 
-> One sentence stating the problem, set as a blockquote so it reads as the thing
-> being asked rather than as commentary on it.
+> Write one note, on one real piece of work someone else made, that a
+> stranger could use to prove you wrong.
 
-Then a paragraph or two on what makes a strong response --- the room the brief
-leaves, and the judgement it is testing. Keep the provocation and the mechanics
-apart: a student should be able to read the first and know what to make, and
-read the second and know what to hand in.
+This is the semester's method in miniature, marked properly for the first
+time. Pick any domain covered by weeks 1 through 5 --- visual art, code,
+prose, or the revision exercise from week 2 --- and any real piece of work
+that isn't your own. The room you build the note in is the crit from week 6;
+the version you hand in is the one that survived it.
+
+A strong response doesn't hedge the note into safety to guarantee it can't
+be wrong. It stakes a specific claim, on a specific part of the work, and
+says plainly what would disprove it. A weak response is technically correct
+about something nobody could disagree with, which is a different kind of
+failure to being wrong outright.
 
 ## What you submit
 
-Name the artefact and the format. If evidence of process is part of the
-submission, say which files and what each is for.
+One page: the piece of work (linked, attached, or quoted in full if it's
+short enough), your note on it, and one sentence stating what would prove
+the note wrong. Say in a line what assistance, if any, you used to draft it
+--- the policies page explains why that line matters here specifically.
 
-The optional `marking:` block renders a criterion table (weighted) or a marking
-statement (holistic) below; leave it out and say how the work is marked in
-prose.
+## How it's marked
+
+- **Specificity (40%)** --- does the note point at a location in the work,
+  or at the work as a whole.
+- **Falsifiability (30%)** --- does the note say what would change its own
+  mind, and would that thing actually change it.
+- **Care (30%)** --- is the note aimed at the choice, not the chooser, even
+  where the two are hard to pull apart.
