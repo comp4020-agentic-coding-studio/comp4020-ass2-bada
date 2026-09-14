@@ -8,14 +8,22 @@ violate the thing it's teaching.
 
 ## Content rules
 
-- **No repeated domain.** Each crit (`src/content/sessions/`) names the
-  critique domain it covers in a `domain:` frontmatter key. No two crits share
-  a domain --- `spec/course-coherence.test.ts` enforces this. A course that
-  repeats itself is exactly the failure mode this course is about.
+- **No repeated domain.** Six of the twelve sessions (`src/content/sessions/`)
+  test the method against a new critique domain and name it in a `domain:`
+  frontmatter key; the other six (orientation, revision, the two portfolio
+  weeks, receiving, the final crit) run the method back on work the course has
+  already produced and carry no `domain:` key at all. No two of the six
+  domains repeat --- `spec/course-coherence.test.ts` enforces both that count
+  and that uniqueness. A course that repeats itself is exactly the failure
+  mode this course is about.
 - **A lecture earns its week.** A lecture exists only where it introduces
   theory the same week's crit is about to use. Weeks without new theory carry
-  no lecture --- that's the practicum design, not a gap. Every lecture
-  declares a `related:` edge to the crit it feeds.
+  no lecture --- that's the practicum design, not a gap. Not every session
+  with something new to try gets a standalone lecture, either: weeks 8 and 10
+  introduce their own protocol inline, in the session, because the idea is a
+  practice to attempt in the room rather than a conceptual claim worth
+  arguing for beforehand. Every lecture declares a `related:` edge to the crit
+  it feeds.
 - **Write notes, don't write reactions.** Any prose on this site that
   describes or models feedback --- a crit brief, a marking description, a
   lecture outline --- follows the course's own bar: name the specific thing,

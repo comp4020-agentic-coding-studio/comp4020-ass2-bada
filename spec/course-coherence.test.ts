@@ -36,13 +36,18 @@ const BANNED_PHRASES = [
 ];
 
 describe("course coherence", () => {
-  it("gives every crit a distinct critique domain", () => {
+  it("gives every domain-testing crit a distinct critique domain", () => {
     const sessions = api.nodes.filter((node) => node.type === "sessions");
     const domains = sessions
       .map((node) => node.meta?.domain)
       .filter((domain): domain is string => typeof domain === "string" && domain.length > 0);
 
-    expect(domains.length, "no crit declared a domain").toBeGreaterThan(0);
+    // Six sessions test the method against a new domain; the other six
+    // (orientation, revision, the two portfolio weeks, receiving, the final
+    // crit) run the method back on work the course already produced and
+    // carry no domain key. If this count drifts, either a real domain lost
+    // its key or a non-domain week gained one it shouldn't have.
+    expect(domains.length, "expected exactly six declared critique domains").toBe(6);
     expect(new Set(domains).size, "two crits share a critique domain").toBe(domains.length);
   });
 

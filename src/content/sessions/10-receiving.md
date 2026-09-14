@@ -8,7 +8,6 @@ date: 2027-04-26
 teachers:
   - marisol-quaye
   - idris-fenn
-domain: receiving
 spec:
   - you can repeat a note back accurately before responding to it
   - you can name one note this semester you initially dismissed and later

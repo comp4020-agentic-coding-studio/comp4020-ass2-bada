@@ -8,7 +8,6 @@ date: 2027-05-03
 teachers:
   - marisol-quaye
   - idris-fenn
-domain: portfolio assembly
 spec:
   - you can point to your weakest note from the semester and say, specifically,
     what was wrong with it

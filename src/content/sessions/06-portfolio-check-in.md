@@ -8,7 +8,6 @@ date: 2027-03-29
 teachers:
   - marisol-quaye
   - idris-fenn
-domain: portfolio check-in
 spec:
   - you arrive with a draft of the note you're submitting for Assignment 1
   - you leave having changed at least one word in it because of something

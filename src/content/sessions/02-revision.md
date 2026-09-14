@@ -8,7 +8,6 @@ date: 2027-03-01
 teachers:
   - marisol-quaye
   - idris-fenn
-domain: revision
 spec:
   - you have rewritten a real vague note you received into a specific,
     falsifiable one, on the same piece of work
@@ -29,9 +28,10 @@ would have to change to prove the new version wrong. Then we swap, and the
 room tries to break the rewrite --- if a partner can't find the specific
 thing you claimed to name, the rewrite hasn't earned the pass yet.
 
-This is the only week with no new domain. It's here on purpose, straight
-after orientation: before the method has to survive a domain change, it has
-to survive being pointed back at something you already have feelings about.
+Unlike every week from here to week 9, this one doesn't introduce a new
+critique domain. It's here on purpose, straight after orientation: before
+the method has to survive a domain change, it has to survive being pointed
+back at something you already have feelings about.
 
 ## Leaves with
 

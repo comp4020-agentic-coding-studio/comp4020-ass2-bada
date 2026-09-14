@@ -2,13 +2,12 @@
 title: Final crit
 description:
   The showcase --- your finished portfolio, up in front of the room one
-  last time, on the same terms as week 1.
+  last time, on the same terms the room has used since week 3.
 week: 12
 date: 2027-05-10
 teachers:
   - marisol-quaye
   - idris-fenn
-domain: final crit
 spec:
   - you present your portfolio's strongest note and say why it's the
     strongest, specifically
@@ -24,8 +23,9 @@ Your finished [Final Project](/assessments/final-project/) portfolio.
 
 ## The crit
 
-Last session, same format as the very first: work goes up, the room writes
-before it speaks, notes get read aloud. The difference is what's up --- not
+Last session, the same silent-write-then-read-aloud format the room has
+used since week 3: work goes up, the room writes before it speaks, notes get
+read aloud. The difference is what's up --- not
 a single piece of work but a semester's worth of notes about other people's,
 and this time the room's notes are about your judgement across six domains,
 not about any one of them. Marisol and Idris each give one note in the room;

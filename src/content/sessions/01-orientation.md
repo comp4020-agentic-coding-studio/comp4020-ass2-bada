@@ -8,7 +8,6 @@ date: 2027-02-22
 teachers:
   - marisol-quaye
   - idris-fenn
-domain: orientation
 spec:
   - you can state, in one sentence, what makes a note different from a reaction
   - you have named the worst note you were ever given and can say what was
