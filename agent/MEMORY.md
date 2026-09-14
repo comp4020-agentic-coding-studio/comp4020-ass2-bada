@@ -1122,3 +1122,49 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   element whose draw call sits outside the loop/branch that normally sets
   colour for its category, since a scene can look entirely fine while one
   specific element is drawing in a colour that makes it disappear.
+- An unescaped colon inside an unquoted YAML block-sequence string breaks
+  `astro check`'s frontmatter parsing with a cryptic "can not read an
+  implicit mapping pair; a colon is missed" pointing at the exact line/col —
+  the colon gets read as a new mapping key starting mid-string. Found in
+  `comp4020-ass2-bada` editing a `spec:` bullet to read "...one note per
+  critique domain: visual art, code, ..."; fixed by swapping the colon for
+  an em-dash (`---`), which also matches this template's house prose style
+  better than a colon would have anyway. Worth remembering as the specific
+  error signature to recognise, not just "check your YAML," since the
+  message doesn't mention frontmatter or Markdown at all.
+- A uniqueness/coherence test can be green while structurally unable to ever
+  fail, if the values it checks are unique by construction rather than by the
+  invariant it's meant to enforce. `comp4020-ass2-bada`'s
+  `course-coherence.test.ts` asserted "no two sessions share a `domain:`
+  frontmatter value" across all twelve sessions, but half of those twelve
+  values were just the session's own title (`revision`, `portfolio
+  check-in`, `receiving`...) restated as a domain — those can never collide
+  with anything by definition, so the test was really only checking the six
+  *real* critique-domain sessions, silently, while its assertion read as
+  covering all twelve. A blind fresh-eyes subagent given the site's content
+  plus the brief's own coherence bar caught this (among 7 other genuine
+  findings out of 8 total — the other was investigated and found to be a
+  false positive, per the standing fact-check-every-subagent-finding
+  practice elsewhere in this file). Fixed by removing the frontmatter key
+  entirely from the six non-domain weeks and asserting the *count* (`toBe(6)`)
+  alongside the uniqueness check, so the test now fails if a real domain
+  loses its key or a decorative one gains it. General check for any
+  "no duplicates" test: ask whether every value under test is drawn from the
+  same meaningful category, or whether some of them are unique for a reason
+  that has nothing to do with the property being enforced.
+- Auditing a `related:` content graph for "does this structure make sense"
+  is more than checking edges resolve (that's a mechanical link check) — it
+  means cross-referencing each node's own prose against its edges. On
+  `comp4020-ass2-bada`, two crit sessions' own body text explicitly named a
+  concept from a specific other week ("the same method [as week 3]," "care,"
+  a term a different week's lecture defines) with no `related:` edge
+  encoding that dependency, while sibling sessions making the identical kind
+  of claim (a domain crit citing the lecture whose theory it applies) did
+  have one. Found by dumping `dist/api/index.json`'s nodes and diffing which
+  ones had zero `related` entries against which of *those* nodes' bodies
+  contained a callback phrase to another week, not by eyeballing the graph
+  shape alone (24 nodes/24 edges looked plausible without this). Note the
+  field lives at the node's top level (`node.related`), not nested under
+  `node.meta` alongside the other frontmatter — worth checking a sample
+  node's actual JSON shape before writing a graph-traversal script against
+  assumed nesting.

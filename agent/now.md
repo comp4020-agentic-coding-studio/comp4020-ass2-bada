@@ -1,67 +1,58 @@
 # now
 
-## State as of this run (2026-09-14, 165 h to cutoff, `comp4020-ass2-bada`) --- OPENING RUN, PLAN + BUILD
+## State as of this run (2026-09-14, 159 h to cutoff, `comp4020-ass2-bada`) --- DEEPEN RUN
 
-First run on `comp4020-ass2-bada`, Assignment 2: design an entirely new,
-coherent, niche SlopU course (not a broad subject, not a find-and-replace of
-COMP4020) and build its ~20-odd-page site on the fixed template (Slop
-branding, 4 content collections, build pipeline, generated API). The starter
-repo arrived with `CLAUDE.md` deliberately empty and the course code's last
-three digits pre-fixed at `146`.
+Second run. First run built the full SLOP4146 site and left two priorities:
+replace the placeholder `card.png`, and run adversarial coherence checks
+(blind subagent + content-graph sanity) rather than trusting self-review.
+Both done this run, 9 commits (`2d2bd8f`..`2e7855a`):
 
-Chose **SLOP4146, "The Devastating Note"**: a semester teaching one method
-for feedback --- specific, falsifiable, about the work not the person --- and
-testing it across six unrelated domains (visual art, code, prose, a blind
-peer exchange, published-style criticism, the course brief itself). The
-spine is the method, tested repeatedly, not the six domains as separate
-units --- that's what makes it coherent rather than a generic "criticism"
-survey.
+- `card.png` replaced with a real `agent-browser` screenshot of the built
+  home page at 1200x630 (`2d2bd8f`) --- closed the last `check:evidence` gate.
+- Spawned a blind fresh-eyes subagent (source-inaccessible, given only the
+  built site's content + the brief's coherence bar) to review for
+  inconsistency/repetition/filler. It returned 8 ranked findings. Fact-checked
+  every one against source before acting, per standing practice --- 7 were
+  real, specific bugs; 1 (week-11's lecture being "purely retrospective") was
+  independently checked and found false, so left alone.
+- The 7 real findings, fixed and committed individually (`ad60890`, `12dfa77`,
+  `358b7bf`, `4fe7cb8`, `e5ec9cd`, `a97c7d6`): a self-contradicting assignment
+  due date, a rubric-vs-lecture citation mismatch, a structurally-broken
+  domain-uniqueness test (every session had a `domain:` key so it could never
+  fail --- now only the 6 domain-testing sessions carry one, and the test
+  asserts the count), a "five or six domains" hedge that should always read
+  six, a false attribution to a lecture that never makes the claim it was
+  credited with, a two-bios-claim-the-same-week collision, and a stale
+  `PROCESS.md` sentence about the domain-field commit.
+- Went further than the subagent's findings: audited the `related:` content
+  graph directly (`dist/api/index.json`, top-level `related` field --- not
+  under `meta`) for orphans/broken edges. Found two sessions (04-code,
+  08-criticism-as-genre) whose own prose explicitly invokes another week's
+  theory by name ("the same method [as week 3]", "care," week-05's term) with
+  no `related:` edge encoding it. Added both (`2e7855a`). Graph is now 24
+  nodes / 26 edges (directed), no broken targets, no more unexplained gaps ---
+  the remaining no-`related` nodes (revision, receiving, policies) genuinely
+  don't cite anything else in their own prose, so leaving them bare is
+  correct, not an oversight.
 
-Built and committed this run (9 commits, `d11774d`..`9e19978`, plus
-`6c711c0` for `PROCESS.md`):
-
-- `CLAUDE.md` rewritten with real rules (no repeated critique domain, no
-  filler register, every lecture earns its week via a `related:` edge,
-  real assessment weights) --- and made two of them executable in
-  `spec/course-coherence.test.ts`, not just aspirational.
-- `src/course-config.ts` / `src/site-config.ts`: course identity, and
-  "Session" renamed to "Crit" throughout.
-- 12 weekly session/crit pages (asymmetric cadence: 12 sessions but only 6
-  fortnightly lectures, theory only where it feeds that week's crit --- this
-  is what gets the page count to "twenty-odd" rather than well past it).
-- 3 assessments (30/20/50, weights checked by the new spec test): the Note,
-  the Peer Review Exchange (blind, anonymity-as-courage-not-cover), the
-  Critique Portfolio.
-- People, policies, home page, 404, and the week-1 deck all rewritten from
-  starter content; two people photos dropped deliberately (confirmed
-  `ContentLayout.astro` falls back cleanly to a plain heading with no hero
-  image, so image-free is a real design choice, not a corner cut).
-- `PROCESS.md` written for real (565 words), citing 7 real commits against
-  `comp4020-agentic-coding-studio/comp4020-ass2-bada` (checked against
-  `git remote -v`, not just that the SHAs resolve).
-
-Verified: `pnpm check` clean (0 typecheck errors/warnings, 31 pages built,
-axe clean, no broken links, 4/4 vitest tests pass, zero build warnings ---
-fixed one along the way, a stale `404.md` `heroImage` pointing at a hero
-asset already deleted from the home page). `pnpm check:evidence` passes
-every gate except one, left deliberately: `src/assets/images/card.png` is
-still the starter og:image placeholder.
-
-Nothing pushed --- doctrine only requires push/ship on the finishing run,
-and 165h to cutoff makes this the opening run, not that one. Repo stays
-private; no live URL to verify yet.
+Verified: `pnpm check` and `pnpm check:evidence` both green after every
+content edit, re-verified once more after the final commit. Working tree
+clean. Nothing pushed --- this is a deepen run, not the finishing one.
 
 ## Single most important next action
 
-On the next `comp4020-ass2-bada` run (a "deepen" run, not finishing yet):
-replace `src/assets/images/card.png` with a real og:image composed from an
-actual screenshot of the built site (PNG/JPEG, not AVIF --- see `MEMORY.md`'s
-standing note on link-preview cards), which is the one remaining
-`check:evidence` gate. Beyond that, this deliverable would benefit from the
-same adversarial techniques used on past deliverables: a blind fresh-eyes
-subagent read of the content against the brief's own coherence bar, and a
-check that the `related:` graph edges actually form a sensible structure
-(not just that they resolve) now that 24 nodes/11 edges exist. Don't touch
-`comp4020-crit5-bada` or any other repo --- this file is shared across all
-Bada deliverables and nothing about that closed one carries forward except
-what's in `MEMORY.md`.
+Next run should be treated as a candidate **finishing run** if hours-to-cutoff
+warrants it (check the prompt, not this file, for that call). If so: reread
+`PROCESS.md` in full against the actual current commit history (it cites 7
+commits as of this run; the finishing run will add more and should audit the
+whole narrative, not just patch the newest stale line), confirm `git remote
+-v` matches every citation URL's org/repo (per `MEMORY.md`'s standing gotcha
+that `check:evidence` never validates the URL, only that the SHA resolves),
+run one more real-browser check of every page at both marking viewports, then
+commit, `git status` clean, and push. If it's not yet the finishing run: the
+site is in good shape content-wise now, so a further deepen pass would get
+more value from a second cold-open-style read of the crit *specs* (do the
+`spec:` bullets under each session actually match what the room does that
+week, the same "does the copy match the built behaviour" check already
+applied here to `related:` edges) than from a third blind-subagent pass on
+prose alone.
