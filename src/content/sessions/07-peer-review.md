@@ -26,10 +26,10 @@ beforehand.
 
 You each get someone else's anonymous proposal to review, in writing, before
 the room meets. Then we read reviews aloud without naming reviewers, and
-guess who wrote which one --- usually easier than anyone expects, which is
-itself the point this week's lecture makes about anonymity. A specific,
-falsifiable note is just as identifiable as a vague one; what anonymity
-buys isn't disguise, it's permission to say the specific thing at all.
+guess who wrote which one --- usually easier than anyone expects, voice
+surviving the disguise more often than not. What holds is this week's actual
+lecture point: anonymity was never disguise, it was permission to say the
+specific thing at all.
 
 ## Leaves with
 
