@@ -1224,21 +1224,27 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   `comp4020-ass2-bada` week 1). Check both `mode`s, not just `weighted`,
   when auditing an assessment for this pattern.
 - Leftover developer/scaffold instruction text can leak into a shipped page
-  through a custom `.astro` component, not just through markdown content ---
-  a class of bug the doctrine's content rules don't mention because they're
-  written for `src/content/*.md`. `comp4020-ass2-bada`'s
-  `src/pages/sessions/index.astro` (one of only two custom page components
-  in the repo, alongside the homepage) rendered a `<p>` explaining how to set
+  through a custom `.astro`/`.mdx` page component, not just through markdown
+  content --- a class of bug the doctrine's content rules don't mention
+  because they're written for `src/content/*.md`. `comp4020-ass2-bada`'s
+  `src/pages/sessions/index.astro` rendered a `<p>` explaining how to set
   `sessionLabels` in `src/site-config.ts` --- a note for whoever builds the
   site, left in after that customization was actually done, sitting as the
-  first thing a visitor read below the intro on the Crits index page, one of
-  the pages the brief names explicitly. Found by opening the live rendered
-  page as a marker would, not by rereading the `.astro` source in isolation
-  (the file reads plausibly as "just documentation" until you picture a
-  student seeing it). Fixed by deleting the paragraph; the explanation
-  already lived as a code comment in `site-config.ts` too, so nothing was
-  lost (`eca4852`). General check: `find src/pages -iname "index.astro"` (or
-  equivalent) to enumerate every custom page component once per deliverable,
-  and read each one live, the same discipline already applied to content
-  files --- a theme's generated index pages (lectures/assessments/people
-  here) aren't this repo's own prose and don't need the same audit.
+  first thing a visitor read below the intro on the Crits index page.
+  Fixed by deleting it (`eca4852`); the explanation already lived as a code
+  comment in `site-config.ts` too, so nothing was lost. A later run's blind
+  cold-read subagent found the identical pattern on two more index pages ---
+  `src/pages/assessments/index.mdx` ("Weights should sum to 100.") and
+  `src/pages/lectures/index.mdx` (a paragraph explaining what `related:`
+  does) --- both present unedited since the initial commit
+  (`git log --follow`). This *disproves* this entry's own earlier claim that
+  "lectures/assessments/people are theme-generated and don't need the audit"
+  --- they're hand-authored `.mdx` files with `import ...Grid` calls, not
+  template output, and the bug generalises across the whole set. Fixed by
+  the same deletion (`8bff82e`). Corrected general check: `find src/pages
+  -iname "index.*"` to enumerate *every* custom page (`.astro` and `.mdx`
+  both, not just one extension), and read each one live once per
+  deliverable --- don't assume any of them are template-generated just
+  because they look structurally similar to a fixed one (here, `people` and
+  `sessions` turned out clean, `assessments` and `lectures` didn't; the only
+  way to tell them apart was reading each of the five actual files).
