@@ -41,11 +41,3 @@ A written review of the proposal you're assigned, following the same
 specific-and-falsifiable standard as every other week. No names, no
 identifying references to who you think the author is, even if you're
 confident.
-
-## How it's marked
-
-Holistically, against one question: is this the review you'd have written
-with your name on it. A review that only got specific because nobody would
-know who said it hasn't demonstrated the skill this course is teaching ---
-it's demonstrated what a lack of consequences does to someone who hasn't
-practised the skill without that cover.
