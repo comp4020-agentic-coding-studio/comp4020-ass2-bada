@@ -33,5 +33,5 @@ you take both live, using week 10's method, before the semester ends.
 
 ## Leaves with
 
-The Final Project, submitted, and a room's worth of live feedback on your
-last chance to use it.
+A room's worth of live feedback on your last chance to use it, and a
+Final Project ready to submit at noon the following Monday.
