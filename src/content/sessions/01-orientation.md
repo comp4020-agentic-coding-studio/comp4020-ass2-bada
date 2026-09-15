@@ -10,8 +10,8 @@ teachers:
   - idris-fenn
 spec:
   - you can state, in one sentence, what makes a note different from a reaction
-  - you have named the worst note you were ever given and can say what was
-    actually wrong with it, not just that it stung
+  - you have named a note that didn't change what you did and can say what
+    was actually wrong with it, not just that it stung
 ---
 
 ## Bring
