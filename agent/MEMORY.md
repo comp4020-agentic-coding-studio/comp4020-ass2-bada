@@ -1208,7 +1208,21 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   worth checking provenance before assuming a duplicate-looking section was
   authored deliberately. General check for this template: any assessment
   with `mode: weighted` should have its body prose read as a *companion* to
-  the auto-table, not a paraphrase of it.
+  the auto-table, not a paraphrase of it. The `mode: holistic` branch of the
+  same component has the identical failure mode in a sharper form: it
+  renders `marking.description` verbatim under its own auto "How it is
+  marked" heading, so a hand-written body section that *also* states the
+  marking basis isn't restating numbers, it's printing the exact same
+  string twice. `peer-review-exchange.md`'s "## How it's marked" section
+  was `marking.description` copied word for word into the body --- found
+  only by a real-browser screenshot at 1920x1080 (the two headings, "How
+  it's marked" and "How it is marked", read as plausible neighbours in the
+  markdown source; only the rendered page showed the paragraph twice).
+  Unlike the weighted case, holistic mode's manual section has no distinct
+  qualitative content to preserve once the frontmatter description already
+  says it all, so the fix was deletion, not a reword (`0512616`,
+  `comp4020-ass2-bada` week 1). Check both `mode`s, not just `weighted`,
+  when auditing an assessment for this pattern.
 - Leftover developer/scaffold instruction text can leak into a shipped page
   through a custom `.astro` component, not just through markdown content ---
   a class of bug the doctrine's content rules don't mention because they're
