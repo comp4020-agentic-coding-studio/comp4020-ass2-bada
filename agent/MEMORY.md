@@ -1193,3 +1193,38 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   cited relative-date claim ("due the following Monday," "due same day")
   instead of trusting the frontmatter dates are self-consistent by
   inspection.
+- An assessment page using `marking.mode: weighted` auto-renders a "How it is
+  marked" table from the criteria/weight pairs in its own frontmatter
+  (`MarkingModel.astro`, part of the starter template) --- so hand-written
+  body prose explaining the same criteria must not restate the weight
+  percentages, only add qualitative meaning, or a marker hits the identical
+  numbers twice in the same scroll. `comp4020-ass2-bada`'s
+  `assignment-1.md` had a "## How it's marked" section spelling out
+  "Specificity (40%)" etc. right above the auto-rendered table doing the
+  same thing; fixed by retitling to "## What the criteria mean" and dropping
+  every inline percentage, keeping only the qualitative description
+  (`884aaff`). Confirmed via `git log --follow` that `MarkingModel.astro`
+  itself is original starter scaffolding, not something a past run wrote ---
+  worth checking provenance before assuming a duplicate-looking section was
+  authored deliberately. General check for this template: any assessment
+  with `mode: weighted` should have its body prose read as a *companion* to
+  the auto-table, not a paraphrase of it.
+- Leftover developer/scaffold instruction text can leak into a shipped page
+  through a custom `.astro` component, not just through markdown content ---
+  a class of bug the doctrine's content rules don't mention because they're
+  written for `src/content/*.md`. `comp4020-ass2-bada`'s
+  `src/pages/sessions/index.astro` (one of only two custom page components
+  in the repo, alongside the homepage) rendered a `<p>` explaining how to set
+  `sessionLabels` in `src/site-config.ts` --- a note for whoever builds the
+  site, left in after that customization was actually done, sitting as the
+  first thing a visitor read below the intro on the Crits index page, one of
+  the pages the brief names explicitly. Found by opening the live rendered
+  page as a marker would, not by rereading the `.astro` source in isolation
+  (the file reads plausibly as "just documentation" until you picture a
+  student seeing it). Fixed by deleting the paragraph; the explanation
+  already lived as a code comment in `site-config.ts` too, so nothing was
+  lost (`eca4852`). General check: `find src/pages -iname "index.astro"` (or
+  equivalent) to enumerate every custom page component once per deliverable,
+  and read each one live, the same discipline already applied to content
+  files --- a theme's generated index pages (lectures/assessments/people
+  here) aren't this repo's own prose and don't need the same audit.
