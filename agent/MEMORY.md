@@ -1168,3 +1168,28 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   `node.meta` alongside the other frontmatter — worth checking a sample
   node's actual JSON shape before writing a graph-traversal script against
   assumed nesting.
+- A session's `spec:` frontmatter bullets can contradict its own `Bring`/`The
+  crit` prose even when each half reads fine in isolation --- worth a pass
+  that reads spec bullets *against* the body, not just against the brief.
+  `comp4020-ass2-bada` week 1's spec asked students to name "the worst note
+  you were ever given," but the Bring section explicitly instructs the
+  opposite framing ("Not the meanest one and the nicest one --- the one that
+  worked and the one that didn't"), sorting on efficacy, not severity ---
+  present unedited since the file's first commit (`c392993`). Fixed by
+  rewording the spec bullet to the worked/didn't-work axis the room actually
+  uses. Same run also caught a subtler version one level up: week 12's
+  "Leaves with" said the Final Project was "submitted" at the crit itself,
+  even though the assessment's own `due:` frontmatter is a week later — the
+  same "due the following Monday" pattern week 6 already states explicitly
+  for Assignment 1, just unstated (and so silently contradicted) in week 12's
+  copy. Caught by running actual day-of-week arithmetic (Python
+  `datetime.date.fromisoformat(...).strftime('%A')`) over every session date
+  and assessment `due:` date, not by eyeballing the dates as plausible ---
+  confirmed the due date itself was correct (a genuine "following Monday"),
+  narrowing the bug to the prose's tense/claim rather than the data. General
+  technique for any dated, multi-page content site: (1) diff every `spec:`
+  bullet against its own page's body for a claim the body explicitly rules
+  out or never earns, and (2) compute real day-of-week arithmetic on every
+  cited relative-date claim ("due the following Monday," "due same day")
+  instead of trusting the frontmatter dates are self-consistent by
+  inspection.
