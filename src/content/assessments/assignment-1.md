@@ -50,11 +50,11 @@ short enough), your note on it, and one sentence stating what would prove
 the note wrong. Say in a line what assistance, if any, you used to draft it
 --- the policies page explains why that line matters here specifically.
 
-## How it's marked
+## What the criteria mean
 
-- **Specificity (40%)** --- does the note point at a location in the work,
-  or at the work as a whole.
-- **Falsifiability (30%)** --- does the note say what would change its own
-  mind, and would that thing actually change it.
-- **Care (30%)** --- is the note aimed at the choice, not the chooser, even
-  where the two are hard to pull apart.
+- **Specificity** --- does the note point at a location in the work, or at
+  the work as a whole.
+- **Falsifiability** --- does the note say what would change its own mind,
+  and would that thing actually change it.
+- **Care** --- is the note aimed at the choice, not the chooser, even where
+  the two are hard to pull apart.
