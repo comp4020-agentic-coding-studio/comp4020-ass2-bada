@@ -21,6 +21,8 @@ spec:
     with no claim under it
   - you can state, if asked, that you would sign this exact review with
     your name on it
+related:
+  - sessions/07-peer-review
 ---
 
 ## The brief
