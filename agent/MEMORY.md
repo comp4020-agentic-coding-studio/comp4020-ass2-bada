@@ -1290,3 +1290,20 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   one of them explains why (here, an assessment due the same day as a crit
   that explicitly critiques that just-submitted brief) --- read the prose
   before concluding a shared date is drift.
+- A `PROCESS.md`-style account with a hard word cap (this brief: 400--600)
+  accumulates a backlog of small, real fix commits across deepen runs faster
+  than the prose can afford one citation apiece --- `comp4020-ass2-bada`
+  carried three uncited fix commits (`0512616`, `8bff82e`, `af3101d`) behind
+  a flagged-but-deferred decision across three consecutive hand-offs before
+  one run actually resolved it. The brief's own instruction settles it: "one
+  narrative... rather than a run of fixes with a commit hash apiece" means
+  citing every instance of an already-illustrated pattern is actively
+  against the brief, not just a nice-to-have trim. Resolved by folding only
+  the newest instance (`6578578`) into the existing illustrative list as one
+  more example of the pattern already named, leaving the older three
+  uncited (`a2fba8a`) --- word count moved 553→575, still inside the cap.
+  General check for any word-capped process account: when a "should I cite
+  this too" question gets deferred more than once, that's the signal to
+  settle it, not keep re-flagging it, and the settling move is usually "add
+  the newest as one more example of a pattern already stated," not "cite
+  everything" or "cite nothing new ever again."
