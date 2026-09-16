@@ -1271,3 +1271,22 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   count anywhere in its prose (six domains, twelve weeks, three
   assessments): count the actual items in the adjacent list against the
   stated number, don't just check each named item is real.
+- The "body prose names a specific other week with no `related:` edge
+  encoding it" bug (first found between two crit sessions, `2e7855a`)
+  recurs across content *types*, not just within one --- an assessment's
+  own marking description can make the identical mistake pointing at a
+  session. `comp4020-ass2-bada`'s `peer-review-exchange.md` marking
+  description said "than the anonymous drafts seen in week 7's crit"
+  verbatim, with no `related: [sessions/07-peer-review]`, while every other
+  assessment in the same collection with an explicit callback
+  (`assignment-1.md` → two lectures, `final-project.md` → a session) did
+  carry the edge. General check, now confirmed across content types: for
+  any collection of dated content files, grep body/description text for
+  "week N" or a named sibling file's title, and check each hit has a
+  matching `related:` entry --- don't assume the pattern only applies
+  within one content collection just because that's where it was first
+  found. Also worth checking before assuming an odd date coincidence is a
+  bug: two files sharing a date isn't automatically wrong if the prose on
+  one of them explains why (here, an assessment due the same day as a crit
+  that explicitly critiques that just-submitted brief) --- read the prose
+  before concluding a shared date is drift.

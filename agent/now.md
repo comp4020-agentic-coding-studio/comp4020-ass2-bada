@@ -1,91 +1,102 @@
 # now
 
-## State as of this run (2026-09-16, 117.0 h to cutoff, `comp4020-ass2-bada`) --- DEEPEN RUN
+## State as of this run (2026-09-16, 111.0 h to cutoff, `comp4020-ass2-bada`) --- DEEPEN RUN
 
-Seventh run, prompt didn't call it the finishing run. Confirmed `pnpm check`
-green and working tree clean at start (previous run's `8bff82e` was already
-on `origin/main` --- the tick process had pushed it).
+Eighth run, prompt didn't call it the finishing run. `pnpm check` green and
+working tree clean at start (prior run's `af3101d` was already on
+`origin/main`).
 
-Worked the prior hand-off's priority list:
+Worked the prior hand-off's three untried angles:
 
-1. Read all six domain crits (visual art, code, prose, peer review,
-   criticism-as-genre, the brief itself) side by side for whether each
-   week's *mechanics* genuinely differ, not just the domain label. They do:
-   silent-write-then-speak (weeks 3--4, deliberately shared structure ---
-   week 4's own copy says that's the point, proof the method isn't an
-   art-crit trick), paired line-edit marking (week 5), blind review +
-   guess-the-author (week 7), deconstruct-a-published-review-then-your-own
-   (week 8), turn-the-method-on-a-brief (week 9). Genuinely varied; no fix
-   needed, a real clean result.
-2. Re-read `spec/course-coherence.test.ts` against the current `CLAUDE.md`
-   content rules and the actual content: domain count (6) and uniqueness,
-   assessment weight sum (100), banned-phrase list all still match what the
-   rules promise. The lecture-earns-its-week pattern (six lectures at weeks
-   1/3/5/7/9/11, weeks 4 and 8 reusing an earlier lecture via their own
-   `related:` field pointing back to it, weeks 2/6/10/12 needing no lecture
-   at all) is internally consistent and matches `CLAUDE.md`'s description
-   of weeks 8 and 10 introducing protocol inline. No test currently
-   enforces "every lecture has a related crit" mechanically, but hand-check
-   confirms it holds; didn't add a check for something already true and
-   already covered by the a11y/broken-link/build checks catching a
-   dangling reference.
-3. Checked every session/lecture/assessment word count for a thin outlier
-   --- lowest is `06-portfolio-check-in` (167 words), which is a working
-   session with deliberately no new material, not a gap. No fix needed.
-4. Read the home page (`src/pages/index.astro`) fresh, the page a marker
-   reads first. Found a real bug: its "What you will do" paragraph claims
-   "six times this semester ... in a different domain each time" but the
-   enumerated list only named five instances (a drawing, a pull request, a
-   paragraph, a proposal under blind review, a restaurant) --- missing the
-   brief-itself domain entirely, present since the file's first commit.
-   Same bug class as the earlier "stop calling the criticism-as-genre
-   domain 'food'" fix, just never caught because past audits checked the
-   domain *names* used, not whether the count of items matched the stated
-   count of six. Fixed by adding a sixth item, "and the brief that assigned
-   all of it" (`af3101d`). Verified live: built with `pnpm preview`, curled
-   the actual rendered HTML at the site's base path
-   (`/comp4020-ass2-bada/`, derived from `astro.config`'s
-   `resolveDeployment`, not `/`) and confirmed the new phrase renders, then
-   shut the preview server down by PID (confirmed no process left under
-   this repo's path in `ps aux`) rather than trusting `pkill`/`jobs`.
+1. **People/policies fresh-eyes pass.** Read both bios
+   (`marisol-quaye.md`, `idris-fenn.md`) and `src/pages/policies/index.mdx`
+   against the actual session data. Marisol's "teaches every lecture" holds
+   --- every lecture's `teachers:` frontmatter lists only her. Her "leads
+   criticism-as-genre, receiving, portfolio" and Idris's "leads code and
+   peer review" claims aren't contradicted anywhere (every session lists
+   both as `teachers:`, with no `lead:` field to check against), so they're
+   uncontradicted narrative colour, not a checkable claim --- left as is.
+   Policies page's late-work/integrity language is internally consistent.
+   No fix needed, a real clean result.
+2. **Domain crits' `spec:` bullets checked for falsifiability**, the
+   self-referential audit the course's own method demands. All twelve
+   bullets across the six domain weeks (visual art, code, prose, peer
+   review, criticism-as-genre, the brief itself) name something a marker
+   could actually observe and many explicitly ask for a falsification
+   condition ("what you'd expect to see if you were wrong," "what test
+   would show your comment is wrong"). No fix needed.
+3. **Live-browser pass at both marking viewports** (1920x1080, 390x844) of
+   the home page and the assessments index --- the two pages the hand-off
+   flagged as never having had a screenshot check this deliverable. Built,
+   served with `pnpm preview --port 5199`, opened via `agent-browser` at the
+   real base path (`/comp4020-ass2-bada/`, per `astro.config`'s
+   `resolveDeployment`). Both pages render cleanly at both widths, no
+   overflow/reflow issues, the six-domain fix from `af3101d` displays
+   correctly, weights sum to 100 (30+20+50) and read correctly on the
+   assessments cards. Shut the preview server down by PID (confirmed via
+   `curl` returning connection-refused after) rather than trusting
+   `pkill`/`jobs`, same discipline as prior runs.
 
-`pnpm check` green after the fix. Working tree has one commit not yet on
-`origin/main` (`af3101d`) --- deepen run, so left unpushed per the same
-convention the prior run used; the tick process has pushed every prior
+Those three came back clean, but a fourth angle --- prompted by noticing
+`peer-review-exchange.md`'s marking description explicitly says "than the
+anonymous drafts seen in week 7's crit" while chasing why week 9's date
+matched the assessment's due date --- found a real instance of the
+already-established bug class (a body callback to a specific other week
+with no `related:` edge encoding it, see `2e7855a`): every other assessment
+with an explicit callback (`assignment-1.md` → lectures/week-03 + week-05,
+`final-project.md` → sessions/11-portfolio-assembly) has a `related:` edge
+for it, but `peer-review-exchange.md` didn't have one back to
+`sessions/07-peer-review`. Fixed by adding it (`6578578`). Course-graph edge
+count went 14→15 in the build log, confirming it was picked up.
+
+Also verified, while investigating that same area, that the coincidence of
+week 9's session date matching the Peer Review Exchange's due date is
+*not* a bug: week 7's peer-review crit is an ungraded practice round, the
+assessment itself is submitted in week 9, and week 9's "the brief itself"
+crit explicitly turns the method on "this week's Peer Review Exchange" as
+one of the briefs under scrutiny --- a deliberate, coherent design, not
+drift. Also re-ran the day-of-week arithmetic check (the technique that
+caught real bugs in `03dbe2f`) against all three assessment due dates and
+all twelve session dates: every one is a Monday, consistent with "due at
+noon on their listed date" and "the following Monday" claims throughout.
+Clean.
+
+`pnpm check` green after the fix (26 files typecheck clean, 31 pages build,
+4/4 tests, no broken links, no a11y violations). Working tree has one
+commit not yet on `origin/main` (`6578578`) --- deepen run, left unpushed
+per the established convention; the tick process has pushed every prior
 run's work within a few hours regardless.
 
 ## Single most important next action
 
 Check the prompt for whether this is the finishing run before doing
 anything else. If yes: work the doctrine's finishing steps in order.
-`PROCESS.md` (rewritten `5d885ed`, still accurate) probably doesn't need a
-citation bump for `af3101d` --- it's the same "prose claims something the
-structure doesn't back up" bug class already cited via `2f318ec`/`eca4852`,
-same judgement call the prior run made about `8bff82e` --- but reread the
-full `PROCESS.md` once against the complete commit list before deciding,
-since three fix commits (`2f318ec`, `8bff82e`, `af3101d`) have now landed
-in that same bug class and it may be worth one added clause naming the
-pattern generally rather than citing all three individually. Confirm the
-course code (SLOP4146), level digit (4, matches ANU UG 1xxx--4xxx), and
-`git remote -v` against `PROCESS.md`'s citation URLs one more time (all
-previously confirmed, unlikely to have drifted, but cheap to recheck at the
-finishing pass). No `fly.toml` --- GitHub Pages deliverable, harness
-publishes and deploys it, never push assessment reflections (none apply:
-`reflections/` is for crits, not assignments).
+`PROCESS.md` (rewritten `5d885ed`) will need a citation added for `6578578`
+--- it's a new instance of the "prose claims a connection the structure
+doesn't back up" bug class already cited via `2f318ec`/`eca4852`/`af3101d`,
+now four commits in that same class; worth deciding at the finishing pass
+whether to name the pattern generally with one added clause rather than
+citing all four individually (the prior run flagged this same question for
+three commits and deferred it --- now overdue to actually decide). Confirm
+the course code (SLOP4146), level digit (4), and `git remote -v` against
+`PROCESS.md`'s citation URLs one more time. No `fly.toml` --- GitHub Pages
+deliverable, harness publishes and deploys it. `reflections/` doesn't apply
+--- this is an assessment, not a crit; its written account is `PROCESS.md`.
 
-If not yet the finishing run: four consecutive passes now (the last two
-runs' cold-reads, this run's mechanics/spec/word-count/home-page audit)
-have each found at most one small real bug and otherwise come back clean,
-which reads as the content genuinely converging rather than there being a
-backlog of undiscovered issues. Untried angles still worth a look before
-declaring it fully stable: (1) the `people/` bios and `policies/` page
-haven't had a dedicated fresh-eyes pass since early in the deliverable's
-life, only a "does it have the scaffold-note bug" check; (2) nobody has
-yet checked whether the six domain crits' `spec:` bullets are each
-independently falsifiable/checkable by a marker the way the course's own
-method demands of a student's note --- a self-referential check the brief
-invites given the course's subject is literally what makes a note
-checkable; (3) a live-browser check at both marking viewports specifically
-of the home page and the assessments index, since neither has had a
-screenshot-based visual pass this deliverable, only text/DOM-level
-checks.
+If not yet the finishing run: five consecutive passes now (three cold-reads
+across the last two runs, this run's people/spec/viewport audit) have each
+found at most one small real bug and otherwise come back clean --- content
+is genuinely converging, not sitting on a backlog. Untried angles still
+worth a look: (1) the deck at `decks/week-01` hasn't had a dedicated
+content-quality read this deliverable, only a structural
+"astromotion checked, no violations" pass --- worth actually reading its
+slides against week-01's lecture content for whether it earns its place;
+(2) `PROCESS.md` itself hasn't been reread end to end against the *current*
+full commit list since `5d885ed` --- four fix commits have landed since
+then (`884aaff`, `0512616`, `8bff82e`, `af3101d`, `6578578` --- five,
+actually) and it's worth checking whether the narrative still reads as
+"one narrative" per the brief's own bar rather than needing another
+citation bump at every deepen run; (3) nobody has checked the `CLAUDE.md`
+in this repo against the actual current content rules it claims to
+enforce, the same "reread the doctrine text against the file" discipline
+used on reflections in other repos.
