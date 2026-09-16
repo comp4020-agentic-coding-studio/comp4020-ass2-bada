@@ -68,8 +68,11 @@ a student
 a crit's spec bullet asked for the opposite of what its own Bring section
 instructed
 ([`cc74cb9`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-bada/commit/cc74cb9)),
-and the home page named "food" as a domain the course doesn't run
-([`2f318ec`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-bada/commit/2f318ec)).
+the home page named "food" as a domain the course doesn't run
+([`2f318ec`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-bada/commit/2f318ec)),
+and, weeks into deepening, an assessment's marking prose named a specific
+crit week by description with no structural edge back to it
+([`6578578`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-bada/commit/6578578)).
 None of these failed `pnpm check`; each only surfaced by reading the page
 the way the brief says a marker will --- home, a few weeks, an assessment,
 the deck, the policies page --- rather than trusting that passing content
