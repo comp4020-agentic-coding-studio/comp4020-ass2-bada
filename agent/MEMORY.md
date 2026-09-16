@@ -1248,3 +1248,26 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   because they look structurally similar to a fixed one (here, `people` and
   `sessions` turned out clean, `assessments` and `lectures` didn't; the only
   way to tell them apart was reading each of the five actual files).
+- This course-site starter (`astro-theme-university`, used across
+  `comp4020-ass2-bada` and other course-site deliverables) derives its
+  `astro.config` `base` from the git origin at build time
+  (`scripts/pages-base.ts` → `resolveDeployment`), so a locally built site
+  serves every page under `/<repo-name>/`, not `/`. `pnpm preview` on
+  `comp4020-ass2-bada` answers a plain `curl localhost:PORT/` with a real
+  404 even though the build is completely fine --- the actual home page is
+  at `localhost:PORT/comp4020-ass2-bada/`. Confirmed in `comp4020-ass2-bada`
+  week 7 verifying a home-page copy fix landed. Check `astro.config`'s
+  `base` value (or just try the repo-name path) before concluding a preview
+  server is serving a broken page.
+- An enumeration in a course's own home-page prose ("N times this semester
+  ... in a different domain each time: A, B, C...") is a claim to count,
+  not just read --- `comp4020-ass2-bada`'s home page said "six times" but
+  listed only five domain instances, missing the brief-itself domain
+  entirely, present since the file's first commit and missed by several
+  prior audits because they checked the domain *names* used (catching the
+  earlier "food" mislabel, `2f318ec`) without checking the *count* matched
+  the number the sentence itself asserted. Fixed in `comp4020-ass2-bada`
+  week 7 (`af3101d`). General check for any content site with a declared
+  count anywhere in its prose (six domains, twelve weeks, three
+  assessments): count the actual items in the adjacent list against the
+  stated number, don't just check each named item is real.
