@@ -1,79 +1,91 @@
 # now
 
-## State as of this run (2026-09-17, 87.0 h to cutoff, `comp4020-ass2-bada`) --- DEEPEN RUN
+## State as of this run (2026-09-18, 76.0 h to cutoff, `comp4020-ass2-bada`) --- DEEPEN RUN
 
-Eleventh run, still not the finishing run (due noon Monday 21 September
-2026; 87h out). Started clean: `pnpm check` and `pnpm check:evidence` both
-green, tree matched `origin/main` at `a5c9c4d`.
+Twelfth run, not yet the finishing run (due noon Monday 21 September 2026).
+Started clean: `pnpm check` and `pnpm check:evidence` both green, tree
+matched `origin/main` at `76214ef`.
 
-Picked up the prior hand-off's three untried angles and closed all three:
+Re-fetched the course source (unchanged from prior reads) and the
+assessment-page rubric text, and picked up the two genuinely fresh angles
+`now.md` had flagged as untried: deck keyboard nav, and a slow-connection
+simulation, both directly named in the HD artefact band descriptor
+("holds up under use it wasn't designed for --- keyboard nav, mid-interaction
+resize, slow connection").
 
-1. **Pagefind search, live.** Found the trigger (`[data-search-trigger]` /
-   `at-search-dialog`, from `astro-theme-university`'s `SearchDialog.astro`
-   --- not obvious from the home page alone, had to grep the theme package).
-   Typed a real query ("peer review") through the actual dialog input and
-   dispatched `input`; results were relevant and sensibly ranked (the crit
-   session and matching assessment first, tangential mentions after). Clean,
-   no fix needed.
-2. **Home page + an assessment page, live-browser, both marking viewports**,
-   specifically re-checking for the sidebar-gap issue found earlier on
-   `people/`. Neither page showed it --- both render cleanly at 1920x1080 and
-   390x844, no horizontal overflow, no odd empty space.
-3. **og:image/meta-description truncation, checked for real.** Every
-   hand-written page description in the built `dist/` sits 72--117
-   characters; the course-wide `description` in `src/course-config.ts` (used
-   as *every* page's `og:description` and `<meta name="description">`,
-   including the home page) was 263 --- truncates mid-word on a Google
-   snippet (~155 chars) and most social link previews (~200 chars). Fixed by
-   rewriting it to 163 characters, keeping the method's core claim
-   (`7cc5b7c`). Folded into `PROCESS.md`'s existing pattern list rather than
-   left as a fourth deferred citation, per the standing lesson in
-   `MEMORY.md` about not letting citations back up --- 575 -> 596 words,
-   still inside the 400--600 cap (`fe5fd4f`).
+1. **Deck keyboard nav, live.** `agent-browser press End`/`Home` on
+   `/decks/week-01/` genuinely moved the presented slide (checked via
+   `.slides section.present` text content, not just the URL) --- reveal.js's
+   real default keyboard bindings work. Found and investigated one quirk:
+   `window.location.hash` doesn't update for `Home`/`End` even though the
+   slide correctly changes (works fine for `ArrowRight`/`ArrowLeft`). Traced
+   this into `reveal.js`'s own vendored `keyboard.js` --- not this repo's
+   code, and the slide content moving correctly means it's cosmetic, not
+   a functional break. No fix made; not our code to fix anyway (deck JS is
+   entirely `astromotion`/`reveal.js` in `node_modules`, this repo only owns
+   the `.deck.mdx` content + a theme stylesheet).
+2. **Slow connection, checked for real, for the first time on this repo**
+   (done previously only on `comp4020-ass1-bada`). `agent-browser network
+   route "**/_astro/*.js" --abort` then reloading: home page, an assessment
+   page, and a crit session page all render completely readable and
+   functional with every script permanently blocked --- genuinely clean.
+   The deck renders as a solid blank screen under the same condition, because
+   reveal.js hides every slide via CSS until its own init JS runs; this is
+   inherent to reveal.js's design (any reveal.js deck, anywhere, needs JS),
+   not a regression introduced by this repo, and it's vendored code the
+   doctrine/README calls fixed. Decided not actionable. Both findings written
+   up in `MEMORY.md` as a general check for future astromotion-deck
+   deliverables.
 
-Investigated but decided *not* to chase: the site's own `--- ` (spaced
-triple-hyphen) em-dash convention, used ~100+ times across all body content,
-doesn't actually get converted to a real em-dash character by the theme's
-configured `remark-smartypants` (`dashes: "oldschool"` expects unspaced
-`word---word`, not `word --- word`) --- it renders as three literal ASCII
-hyphens everywhere, site-wide, and always has. At exactly one narrow-width
-line-break coincidence (the new home-page description, 390px wide), the
-browser split a "---" run itself across two lines ("the work -" / "-specific").
-Confirmed by cropping the actual screenshot, not just eyeballing it. Decided
-this is a pre-existing, consistent, low-severity typographic quirk inherent
-to a site-wide stylistic choice, not a new bug --- fixing it properly would
-mean either touching vendored theme CSS (out of scope --- doctrine calls the
-theme fixed) or hunting down every "---" instance for a rare wrap coincidence
-that doesn't survive most content edits anyway. Noted, not fixed.
+Also re-checked something that looked alarming at first glance and turned
+out fine: `assessments/assignment-1/` shows "Due: 5 April 2027" --- confirmed
+this is deliberate and internally consistent, not a typo. The fictional
+SlopU course runs in semester 1, 2027 (`src/course-config.ts`: `year: 2027`,
+`startDate: "2027-02-22"`), and every session/assessment date in
+`src/content/` is set inside that same fictional calendar, decoupled from
+the real COMP4020 2026 semester. No change made.
 
-Working tree clean, both commits pushed, `origin/main` at `fe5fd4f`.
+No commits this run --- both investigated angles came back clean (nothing
+to fix), and the one thing that at first looked like a bug (the 2027 dates)
+turned out to be intentional and already correct. Working tree still clean
+at `origin/main` `76214ef`.
 
 ## Single most important next action
 
 Check the prompt for whether this is the finishing run before doing
-anything else. Due noon Monday 21 Sept 2026 --- once hours-to-cutoff drops
-under ~72h treat the next prompt as likely-finishing regardless of what it
-says explicitly. If it's the finishing run: work the doctrine's finishing
-steps in order. No `reflections/` needed (assessment, not a crit). No
-`fly.toml` --- GitHub Pages deliverable, harness publishes and deploys it.
-Re-verify `git remote -v` against `PROCESS.md`'s citation URLs one more time
-before shipping, and re-run `pnpm check` + `pnpm check:evidence` as the last
-thing before the final commit.
+anything else. Due noon Monday 21 Sept 2026 --- at 76h out this run wasn't
+called explicitly as the last one, but the next prompt very plausibly will
+be (or will be close enough that hours-to-cutoff should be read generously
+per doctrine's own caution about not deferring a finishing step on
+arithmetic). If it's the finishing run: work the doctrine's finishing steps
+in order. No `reflections/` needed (assessment, not a crit). No `fly.toml`
+--- GitHub Pages deliverable, harness publishes and deploys it. Re-verify
+`git remote -v` against `PROCESS.md`'s citation URLs one more time before
+shipping, and re-run `pnpm check` + `pnpm check:evidence` as the last thing
+before the final commit. Also worth a last read of `PROCESS.md` end to end
+against the actual current commit history --- it was last substantially
+rewritten at `5d885ed` and has only had small folds since; check it still
+reads as one coherent narrative rather than a list, per the brief's own
+instruction.
 
-If not yet the finishing run: six consecutive audit passes now (three in
-run 8, run 9's content check, run 10's deck/people/policies/llms.txt check,
-this run's search/viewport/meta-description check) have found at most one
-or two small real things each. Genuinely fresh angles not yet tried: (1)
-nobody has checked whether the deck (`/decks/week-01/`) actually presents
-well as a *deck* --- keyboard arrow-key navigation between slides, not just
-that each slide renders without overflow; (2) nobody has checked the site
-under a simulated slow connection (`agent-browser network route` to abort a
-script, per the technique already in `MEMORY.md`) for this specific repo ---
-it was done on a sibling deliverable (`comp4020-ass1-bada`) but never here;
-(3) nobody has re-read the actual rubric band descriptors on the assessment
-page itself (referenced by the brief as "Full rubric band descriptors are
-on the assessment page") against what `PROCESS.md` and the site actually
-demonstrate, specifically for what distinguishes an HD PROCESS.md ("why a
-call beat the obvious one, and how you knew the result was right before you
-accepted it"). If time allows, a fresh angle beats a seventh repeat of the
-same viewport-and-read audits.
+If not yet the finishing run: eight consecutive audit passes now (runs 8
+through this one) have found at most one or two small real things each, and
+this run found zero actionable ones --- a legitimate sign the site is close
+to solid, not a sign the checking has gotten lazy (see `MEMORY.md`'s note
+elsewhere about a clean cold-open pass being real evidence, not grounds for
+suspicion). Genuinely fresh angles not yet tried, if there's another deepen
+run before finishing: (1) nobody has done a full read-through of every
+`related:` edge in the built `dist/api/index.json` at once looking for a
+*missing* edge in the other direction not yet covered by the two
+prose-references-a-week-with-no-edge bugs already fixed (`2e7855a`,
+`6578578`) --- e.g. a lecture that a crit's `related:` points to, but that
+lecture doesn't point back; (2) nobody has re-read `spec/course-coherence.
+test.ts` end-to-end asking "what claim in the brief does *this* assertion
+correspond to, and is there a brief claim with no assertion at all" rather
+than auditing content against the brief directly; (3) the peer-review
+exchange / blind-review assessment page could be checked live for whether
+its own described mechanic (submitted anonymously, reviewed blind) is
+actually enforceable by anything on the site or is purely a prose promise
+--- same "does the copy describe a built affordance" check that caught the
+`ass1-bada` drag-copy bug, applied to a process/policy claim instead of a
+UI one.

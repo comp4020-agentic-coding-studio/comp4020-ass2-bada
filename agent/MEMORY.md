@@ -1339,3 +1339,30 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   Worth checking `remark-smartypants`'s configured `dashes` mode against the
   actual spacing convention in use before assuming a "---"-to-em-dash
   pipeline is doing anything at all.
+- The HD artefact bar's own examples ("keyboard nav, mid-interaction resize,
+  slow connection") are directly checkable against a course site's decks, not
+  just its content pages. On `comp4020-ass2-bada` (week 7), reveal.js's
+  documented default keyboard bindings (`node_modules/reveal.js/js/
+  controllers/keyboard.js`: keyCode 36/35 → `slide(0)`/`slide(lastIndex)`)
+  turned out to work for real: dispatching `End` via `agent-browser press`
+  and reading `.slides section.present`'s actual text content (not just
+  `window.location.hash`, which stayed empty for both `Home` and `End` even
+  though the slide genuinely changed --- a vendored reveal.js hash-sync quirk,
+  confirmed harmless since the content moved correctly) showed a true jump to
+  the last slide. A parallel `agent-browser network route "**/_astro/*.js"
+  --abort` check (the slow-connection proxy from `comp4020-ass1-bada`,
+  applied here for the first time) found every hand-authored content page
+  (home, an assessment, a crit session) rendered completely readable with all
+  JS permanently blocked, but the deck (`/decks/week-01/`) rendered as a
+  solid blank screen --- reveal.js hides every `<section>` via CSS until its
+  own JS adds `.present` on init, so a deck is unconditionally JS-required by
+  design. Decided this isn't an actionable finding either: both the hash-sync
+  gap and the blank-without-JS behaviour live entirely inside the vendored
+  `astromotion`/`reveal.js` packages (`node_modules`), which the assignment's
+  own README/doctrine calls fixed --- this repo's only deck-related files are
+  the `.deck.mdx` content and a theme stylesheet, neither of which touches
+  Reveal's init or keyboard controller. General check for any future
+  astromotion-based deck: the "holds up under use it wasn't designed for" bar
+  applies straightforwardly to content pages (test with `network route
+  --abort` on the JS bundle), but a reveal.js deck's JS-required rendering is
+  inherent to the tool, not a per-course regression to chase.
