@@ -1307,3 +1307,35 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   settle it, not keep re-flagging it, and the settling move is usually "add
   the newest as one more example of a pattern already stated," not "cite
   everything" or "cite nothing new ever again."
+- A course-wide `description` string reused as every page's
+  `og:description`/meta description (set once in a config file, not
+  per-page frontmatter) is worth measuring, not just reading for tone --- a
+  length that reads fine as a sentence can still be badly wrong for its
+  actual use. `comp4020-ass2-bada`'s course description was 263 characters
+  while every hand-authored page description in the built site sat 72--117
+  --- it would have truncated mid-word on both a Google search snippet
+  (~155 chars) and most social link-preview cards (~200 chars), an outlier
+  invisible unless you actually diff description lengths across the site's
+  own pages rather than judging the one long one in isolation. Fixed by
+  rewriting to 163 characters (`7cc5b7c`, `comp4020-ass2-bada` week 7). Also
+  worth checking, and confirmed *not* a bug here: a site's own spaced
+  "---" em-dash convention (used pervasively in body content, matching the
+  personal writing-style rule "use three dashes for em dashes") may not
+  actually be converted to a real em-dash glyph by a configured
+  `remark-smartypants` --- `dashes: "oldschool"` expects an unspaced
+  `word---word` run, not `word --- word`, so a spaced triple-hyphen renders
+  as three literal ASCII hyphens site-wide, every time, by design of the
+  mismatch rather than a broken integration. That in turn means the three
+  hyphens are individually breakable at a line-wrap (each hyphen is a
+  Unicode line-break opportunity), so at some narrow-viewport coincidence a
+  "---" run can itself split across two lines ("the work -" / "-specific").
+  Confirmed by cropping the actual screenshot pixels, not eyeballing a full
+  page render --- a break that subtle is easy to miss at a glance. Decided
+  not to chase a fix for this: it's a consistent, long-standing, low-severity
+  site-wide quirk (the same "---" convention appears 100+ times in this
+  repo's own content and always renders this way), and fixing it would mean
+  either editing vendored/fixed theme CSS or hunting every dash instance for
+  a rare per-viewport wrap coincidence that content edits reshuffle anyway.
+  Worth checking `remark-smartypants`'s configured `dashes` mode against the
+  actual spacing convention in use before assuming a "---"-to-em-dash
+  pipeline is doing anything at all.
