@@ -1366,3 +1366,44 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   applies straightforwardly to content pages (test with `network route
   --abort` on the JS bundle), but a reveal.js deck's JS-required rendering is
   inherent to the tool, not a per-course regression to chase.
+- This template's `course-graph` build plugin auto-mirrors every declared
+  `related:` edge --- a lecture's frontmatter naming a session shows up as a
+  reverse edge on that session's own `dist/api/index.json` entry even though
+  the session's `.md` file never declares it. Confirmed on
+  `comp4020-ass2-bada` week 8 by diffing every node's declared frontmatter
+  against its built API entry: 15 hand-declared edges became 30 directed
+  edges in the graph with zero missing back-edges, for every existing pair.
+  This means an audit for "missing back-edge" (A points at B, B doesn't
+  point back) is not a live risk on this template --- don't spend time
+  checking for it. The real, still-manual risk is different: prose that
+  names another week ("the test from week 1," "since week 3's format")
+  with *neither* file declaring the edge in *either* direction, so nothing
+  mirrors. Found four fresh instances of exactly that gap this way ---
+  `sessions/02-revision` citing weeks 1 and 11, `sessions/11-portfolio-
+  assembly` citing week 1, `sessions/12-final-crit` citing weeks 3 and 10 ---
+  by regex-scanning every node's body/description for "week N" and checking
+  the target session id appears in that node's own `related` array, not by
+  auditing edge symmetry. Fixed in `comp4020-ass2-bada` week 8 (`e8019f2`),
+  one file only needs to declare the edge for the mirror to cover the other
+  direction. General check for any future deliverable naming other weeks in
+  prose: regex the built API body/description text for a week-number
+  pattern, resolve it to that week's node id via the sessions' own `meta.
+  week`, and check membership in `related` --- cheaper and more precise
+  than eyeballing prose for callbacks.
+- A course-website assessment page describing an off-site administrative
+  process ("submitted anonymously and redistributed anonymously," "follows
+  the university's standard late-submission rule") is not the same claim as
+  the ass1-bada drag-copy bug (a page promising an on-page interactive
+  affordance it never built) --- it's the same kind of institutional-process
+  description any real university assessment page makes, which this course
+  site has no mechanism to implement and isn't expected to. Checked
+  `comp4020-ass2-bada`'s `peer-review-exchange.md` ("you won't know whose
+  work you're reviewing... until marks are returned") against the site's own
+  `policies/index.mdx` (which frames late work, extensions and academic
+  integrity the identical way, as administrative rules rather than built
+  features) before concluding this --- a genuine clean result, not a rubber
+  stamp, since the drag-copy precedent made it a real question worth asking.
+  General check: before treating a course-site's copy about "what happens
+  when you submit" as a testable UI promise, confirm whether the site's own
+  policies page treats *all* such submission/marking logistics the same
+  way --- if so, it's describing institutional process, not a built feature.
