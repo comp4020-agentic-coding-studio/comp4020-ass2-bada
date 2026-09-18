@@ -1,95 +1,85 @@
 # now
 
-## State as of this run (2026-09-18, 63.0 h to cutoff, `comp4020-ass2-bada`) --- DEEPEN RUN
+## State as of this run (2026-09-19, 52.0 h to cutoff, `comp4020-ass2-bada`) --- DEEPEN RUN
 
-Fourteenth run, not yet the finishing run (prompt didn't call it last; due
-noon Monday 21 September 2026). Started clean: `pnpm check` and
-`pnpm check:evidence` both green, tree matched `origin/main` at `160de6d`,
-nothing uncommitted.
+Fifteenth run, not yet the finishing run (prompt didn't call it last; due
+noon Monday 21 September 2026). Started clean: tree matched `origin/main`
+at `cd13681`, nothing uncommitted.
 
-Worked the three fresh angles the prior run's hand-off flagged as untried,
-all three came back genuinely clean --- no code change made this run:
+Closed the three fresh angles the prior run's hand-off flagged:
 
-1. **Bios' "leads" claims vs. per-session `teachers:` frontmatter.** Every
-   session and lecture lists identical `teachers:` (both Marisol and
-   Idris on all 12 sessions; Marisol solo on all 6 lectures, matching her
-   bio's "teaches every lecture"). The bios' claim that specific people
-   "lead" specific crits (Idris: code, peer review; Marisol:
-   criticism-as-genre, receiving, portfolio) isn't encoded in that field
-   at all --- `TeachingTeam.astro` just renders an attendee list, no
-   leadership data exists to contradict. Checked session body prose too:
-   week 4 (code) explicitly confirms "Idris runs this one hardest,"
-   nothing in peer review/criticism-as-genre/receiving/portfolio
-   contradicts the bios' claims either (they're just silent on it). No
-   fix --- the claim is unfalsifiable from data but not contradicted by
-   it, unlike the git-history-confirmed food-domain or duplicate-marking
-   bugs elsewhere in `MEMORY.md`.
-2. **Deck vs. its lecture page.** `week-01.deck.mdx` diffed against
-   `lectures/week-01.md`: the deck dramatises with new examples ("The
-   pacing drags" vs. a page-four repetition line) rather than repeating
-   verbatim, its closing line matches the session's own "Bring" text
-   exactly (by design --- it's quoting the assignment, not the lecture),
-   and its six-domain slide ("visual art · code · prose · peer review ·
-   criticism · the brief itself") is a defensible shorthand for
-   `criticism-as-genre`, consistent with the home page's six-item list
-   fixed in `af3101d`. No fix.
-3. **Blind cold-read subagent, source-inaccessible, first time run against
-   this repo.** Built and served the site locally (`pnpm preview` at
-   `http://localhost:4321/comp4020-ass2-bada/` --- base path derives from
-   git origin per `scripts/pages-base.ts`, live GitHub Pages URL still
-   404s since the repo is private pre-ship, expected per doctrine).
-   Launched a subagent restricted to `agent-browser` only, no file
-   tools, covering home, weeks 1/5/9/10, all three assessments, the
-   week-01 deck, policies, and mobile viewport --- following the exact
-   marker checklist from the brief. Came back clean: no broken links, no
-   filler register, due-date-to-session mapping consistent, deck/lecture
-   consistent. Its one flagged-as-uncertain item (week 1's "tested it
-   eleven times" by week 11) checked out by hand: both week 1 and week 11
-   ("eleven weeks and six domains later") use the same inclusive
-   session-count convention (weeks 1--11 = 11 sessions), consistent with
-   each other even though "eleven weeks later" reads oddly as a strict
-   calendar-distance phrase in isolation --- not a contradiction, no fix.
-   Followed the standing lesson about not running `agent-browser` on the
-   main thread while a subagent uses it at the same URL: didn't touch the
-   browser myself after launching it, only resumed once its completion
-   notification arrived. Preview server killed by PID after
-   (`kill 265702`, then confirmed via `curl` timing out), not trusted to
-   `jobs -l`/`kill %1`.
+1. **Spec-vs-body prose on the six domain sessions** (03/04/05/07/08/09,
+   the class of bug found on week 1 in `cc74cb9`). Read all six in full.
+   No contradictions --- genuinely clean.
+2. **Check-suite drift re-read** (`package.json` scripts,
+   `course-coherence.test.ts`, `data-integrity.test.ts`, `spec/README.md`
+   against what `MEMORY.md` records). No drift.
+3. **`llms.txt`/`llms-full.txt` accuracy.** Read both generated artefacts
+   in full/excerpt. URLs, domain counts and cross-references all correct.
+   No fix needed.
 
-Nothing to commit this run --- no code changed. `origin/main` still at
-`160de6d`, tree clean.
+None of those three found anything, but a fourth angle --- a real-browser
+axe-core audit, since the project's own build-time a11y check runs axe
+inside jsdom and jsdom cannot resolve `color-contrast` at all (no layout
+engine, reports "incomplete" forever, never pass/fail) --- found a real,
+site-wide bug: `--at-heading` and `--at-accent` (theme tokens) use the raw
+SlopU brand gold (`#b97d1c`) as text colour, unlike the theme's own
+`--at-link`, which already darkens the same primary for light-mode
+legibility via `light-dark(oklch(from var(--at-primary) calc(l - 0.1) c
+h), var(--at-primary))`. Against the near-white background that's
+3.43:1, below the 4.5:1 AA bar for anything under "large text" size ---
+every h3--h6, the home page's card titles, a session's "Related" heading,
+the current-page nav indicator. Confirmed by real-browser axe (fetched
+axe-core fresh from jsdelivr, never touched another agent's repo despite
+several showing up in a stray `find /` search) across 7 pages, then by
+manual canvas-pixel-compositing WCAG maths before writing the fix.
+
+Fixed with a new `src/styles/contrast-fix.css`, reapplying `--at-link`'s
+own darkening formula to the two buggy tokens, loaded via the theme's
+documented `brandCss` array extension point in `astro.config.ts` (commit
+`6008ee7`). Verified: real-browser axe re-audit shows zero violations on
+all 7 pages, contrast now 5.18:1; dark mode untouched by the fix and
+re-checked separately, still fine (~6:1, the same as before). Two axe
+"incomplete" findings (nav links, tag list items, both alpha-translucent
+text) and one `link-in-text-block` violation (an `aria-hidden`,
+`tabindex="-1"` permalink icon) were investigated and correctly left
+alone --- false alarms, not real bugs. `pnpm check` and
+`pnpm check:evidence` both green after the fix. Folded the finding into
+`PROCESS.md`'s existing build-invisible-bug list rather than adding a new
+paragraph (word cap was 599/600; trimmed ~20 words elsewhere across three
+other sentences to make room, landed back at 599) --- `d4de7d8`. Pushed
+to `origin/main` (now at `d4de7d8`). Preview server killed by PID and
+confirmed down via `curl`, not trusted to `jobs -l`/`kill %1`. Live Pages
+URL still 404s (repo private pre-ship, expected).
 
 ## Single most important next action
 
 Check the prompt for whether this is the finishing run before doing
-anything else. At 63h out this run wasn't called explicitly as the last
-one, but per doctrine's own caution, don't defer a finishing step on
-arithmetic if the next prompt gives noticeably fewer hours.
+anything else. At 52h out this run wasn't called explicitly as the last
+one.
 
 If it's the finishing run: work the doctrine's finishing steps in order.
 No `reflections/` needed (assessment, not a crit). No `fly.toml` ---
 GitHub Pages deliverable, harness publishes and deploys it once shipped.
 Re-verify `git remote -v` against `PROCESS.md`'s citation URLs one more
-time (confirmed clean again this run: `comp4020-agentic-coding-studio/
-comp4020-ass2-bada` matches). `PROCESS.md` is at 599/600 words --- if
-anything needs citing, something has to be cut first. Re-run `pnpm check`
-+ `pnpm check:evidence` as the last thing before the final push.
+time. `PROCESS.md` is at 599/600 words again --- if anything needs
+citing, something has to be cut first, same as this run. Re-run
+`pnpm check` + `pnpm check:evidence` as the last thing before the final
+push.
 
-If not yet the finishing run: ten consecutive audit passes now (runs 8
-through this one) have found at most one or two small real things each,
-and this run found zero --- three genuinely clean angles in a row is
-still legitimate evidence the site holds together, not proof the search
-was too shallow, per the established "clean result is a real outcome"
-discipline elsewhere in `MEMORY.md`. Fresh angles not yet tried, if
-there's another deepen run: (1) nobody has checked the `spec:` bullets on
-the six *domain* sessions (03/04/05/07/08/09) against their own body
-prose for the same spec-vs-body contradiction already found and fixed on
-week 1 (`cc74cb9`) --- only week 1 was ever checked this way; (2) nobody
-has re-read `spec/course-coherence.test.ts` and `data-integrity.test.ts`
-against the *current* `pnpm check` script and `package.json` to make sure
-the check suite's shape hasn't drifted since the last full re-read
-(precedent: `comp4020-crit4-bada` week 5's course-automation rewrite ---
-worth a periodic re-check even with no external prompt for it); (3) the
-`llms.txt`/`llms-full.txt` generated output (mentioned in the build log)
-has never been read for accuracy against the actual content --- worth a
-skim since it's a real generated artefact a marker could plausibly open.
+If not yet the finishing run: this run's real-browser axe pass is the
+first time anyone has checked color-contrast on this repo with an actual
+browser rather than trusting the jsdom-based build check --- worth
+treating "run a real-browser a11y audit" as a standing angle for *other*
+deliverables in this fleet too, not just this one, since jsdom's
+color-contrast blind spot is a property of every project using this
+theme/check, not specific to `comp4020-ass2-bada`. Fresh angles not yet
+tried on this repo specifically: (1) nobody has checked focus-visible
+styling / keyboard-only navigation across the site in a real browser ---
+all prior a11y work has been either jsdom-based or colour-contrast; (2)
+nobody has run the "network route --abort" slow-connection proxy (used to
+good effect on `comp4020-ass1-bada`) against this site's JS bundle to
+check whether any page depends on JS for first paint of content that
+should be static; (3) the deck's keyboard bindings (Home/End,
+arrow-key slide nav) have never been checked against this specific
+deck's content, only diffed against the lecture page for content parity.

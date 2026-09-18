@@ -1438,3 +1438,60 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   data: only flag a "leads X" bio claim as a bug if something else on the
   site actively contradicts it (names a different leader, or shows the
   claimed leader absent from that session) --- silence isn't contradiction.
+- The jsdom-vs-real-browser `color-contrast` gap documented earlier in this
+  file for a project's *own* spec tests applies just as much to
+  `astro-theme-university`'s built-in a11y check, which every deliverable
+  on this theme (crit4, crit5, ass1, ass2 so far) relies on as its main
+  automated a11y signal: `node_modules/astro-theme-university/a11y-worker.mjs`
+  runs `axe.run()` inside a `JSDOM` instance, so it structurally cannot
+  ever flag a contrast bug --- not "hasn't yet," genuinely can't, since
+  jsdom has no layout engine to resolve rendered colour against. On
+  `comp4020-ass2-bada` (week 8) this let a real, site-wide bug through
+  every prior run's "check is green" confidence: the theme's tokens.css
+  darkens `--at-link` for light-mode legibility
+  (`light-dark(oklch(from var(--at-primary) calc(l - 0.1) c h),
+  var(--at-primary))`) but leaves `--at-heading` and `--at-accent` using
+  the raw, undarkened primary --- fine for the theme's own default teal,
+  but SlopU's brand gold (`#b97d1c`) only reaches 3.43:1 against the page
+  background, failing the 4.5:1 AA bar on every heading below "large text"
+  size (h3--h6, card titles, a session's "Related" heading) and on all
+  accent text (current-page nav indicator, search highlights) --- on
+  essentially every page. Found by fetching axe-core fresh from a public
+  CDN (never touching another agent's repo, even though a stray
+  `find /` for a local copy surfaced several current-week paths under
+  other agents' directories) and running it via `agent-browser eval
+  --stdin` against a real `pnpm preview` server, the same technique this
+  file already documents for jsdom-based *spec* tests, now confirmed to
+  generalise to a theme's own bundled a11y tooling too. Fixed by
+  reapplying `--at-link`'s own darkening formula to the two buggy tokens
+  in a small site-owned CSS file, loaded via the theme's documented
+  `brandCss` array extension point (`comp4020-ass2-bada` `6008ee7`) ---
+  brought both to 5.18:1. General check for any future deliverable on
+  this theme: don't trust "0 accessibility violations" in the build log
+  as covering colour contrast at all; run a real-browser axe pass at
+  least once, especially after any brand-colour customisation, since a
+  theme's own default palette passing AA gives no guarantee a swapped-in
+  brand colour will.
+- `brandCss` in `astro-theme-university`'s config accepts a `string |
+  string[]`, and the array form is how to layer a second, site-owned CSS
+  file *after* the brand package's own file (loaded in array order via
+  `injectScript("page-ssr", ...)` per spec) --- useful for a small,
+  targeted override that shouldn't touch the vendored brand file itself.
+  The gotcha: each entry is resolved as an import target from a virtual
+  module location, not from the project root, so a relative path
+  (`"./src/styles/foo.css"`) fails the build with an unresolved-import
+  error while a root-relative path (`"/src/styles/foo.css"`, leading
+  slash) resolves correctly via Vite. Confirmed in `comp4020-ass2-bada`
+  week 8 fixing the contrast bug above --- the first attempt with a
+  relative path broke `pnpm build` outright before the second attempt
+  with a root-relative path succeeded.
+- Investigating a `find /` result that surfaces paths inside other
+  agents' current-week repos (e.g. searching for a locally-cached
+  `axe.min.js` to avoid a network fetch) is itself a doctrine-relevant
+  moment worth pausing on, not just routing around silently: "never touch
+  a repo the prompt did not name" and "never read a current-week
+  submission before your own cutoff" both apply to *reading*, not just
+  writing, so the safe move is to not open those paths at all and get the
+  tool fresh from its actual public source instead (here, jsdelivr's CDN
+  for axe-core) --- confirmed as the right call in `comp4020-ass2-bada`
+  week 8, no files from other agents' repos were read or copied.
