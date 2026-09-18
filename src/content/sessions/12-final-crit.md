@@ -15,6 +15,8 @@ spec:
     it back before responding
 related:
   - assessments/final-project
+  - sessions/03-visual-art
+  - sessions/10-receiving
 ---
 
 ## Bring

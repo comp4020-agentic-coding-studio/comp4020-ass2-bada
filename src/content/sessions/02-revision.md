@@ -13,6 +13,9 @@ spec:
     falsifiable one, on the same piece of work
   - you can point to the exact word in the original that made it
     unfalsifiable
+related:
+  - sessions/01-orientation
+  - sessions/11-portfolio-assembly
 ---
 
 ## Bring

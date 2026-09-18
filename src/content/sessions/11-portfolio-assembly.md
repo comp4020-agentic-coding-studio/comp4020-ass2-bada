@@ -13,6 +13,8 @@ spec:
     what was wrong with it
   - your one-sentence definition of a note from week 1 either still holds or
     you can say exactly where it broke
+related:
+  - sessions/01-orientation
 ---
 
 ## Bring
