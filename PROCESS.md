@@ -70,9 +70,10 @@ instructed
 ([`cc74cb9`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-bada/commit/cc74cb9)),
 the home page named "food" as a domain the course doesn't run
 ([`2f318ec`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-bada/commit/2f318ec)),
-an assessment's marking prose named a specific crit week by description
-with no structural edge back to it
-([`6578578`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-bada/commit/6578578)),
+an assessment's marking prose, then three sessions, named another week's
+test or format with no structural edge back to it
+([`6578578`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-bada/commit/6578578),
+[`e8019f2`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-bada/commit/e8019f2)),
 and the course-wide description, reused as every page's search snippet
 and social-card text, ran to 263 characters against every hand-written
 page description's own under-120
