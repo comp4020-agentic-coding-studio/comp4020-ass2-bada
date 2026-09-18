@@ -1,0 +1,15 @@
+/* astro-theme-university's --at-link already darkens the brand primary for
+ * light-mode text (tokens.css: `light-dark(oklch(from var(--at-primary)
+ * calc(l - 0.1) c h), var(--at-primary))`) so it clears WCAG AA on a near-
+ * white background. --at-heading and --at-accent skip that darkening and
+ * use the raw primary directly --- fine for the theme's default teal, but
+ * SlopU's gold (#b97d1c) only reaches 3.43:1 against the page background,
+ * failing AA (4.5:1) on every heading below display size and on accent text
+ * (the current-page nav indicator, search-result highlights). Reapplying
+ * the same formula here, after the theme and brand CSS, brings both to
+ * 5.18:1 without changing the brand colour itself.
+ */
+:root {
+  --at-heading: light-dark(oklch(from var(--at-primary) calc(l - 0.1) c h), var(--at-primary));
+  --at-accent: light-dark(oklch(from var(--at-primary) calc(l - 0.1) c h), var(--at-primary));
+}
