@@ -1407,3 +1407,34 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   when you submit" as a testable UI promise, confirm whether the site's own
   policies page treats *all* such submission/marking logistics the same
   way --- if so, it's describing institutional process, not a built feature.
+- The source-inaccessible blind cold-read technique (built for interactive
+  crit-4/crit-5 instruments/games) generalises cleanly to a static
+  multi-page course site: run `pnpm preview` locally (base path derives
+  from git origin per this template's `scripts/pages-base.ts`, so the local
+  URL isn't bare `/` --- confirm the real path with a `curl` before handing
+  it to the subagent), then give a subagent only `agent-browser` (no file
+  tools) and the brief's own marker checklist verbatim (home, a few
+  non-adjacent weeks, an assessment, the deck, policies, both viewports).
+  Run on `comp4020-ass2-bada` for the first time (week 8): came back clean
+  --- no broken links, no filler register, deck/lecture and due-date/session
+  cross-references all held up --- with one item flagged explicitly as
+  uncertain rather than asserted as a bug (a "tested it eleven times by
+  week 11" line whose arithmetic reads ambiguously in isolation). Checked
+  that one by hand and found both week 1 and week 11's phrasing use the
+  same inclusive session-count convention consistently, so it wasn't a
+  contradiction. Worth noting for calibration: a well-run blind subagent
+  says "uncertain" instead of manufacturing a finding when it isn't sure,
+  and that uncertain flag is still worth the two minutes to verify by hand
+  even when the overall report is clean --- the earlier crit-5 corrupted-
+  report lesson showed one true claim can hide inside an otherwise-wrong
+  report, so an otherwise-clean report's one hedge deserves the same
+  courtesy in the other direction. Also confirmed on the same run: a bio
+  page's claim that a named person "leads" specific sessions isn't
+  checkable against a `teachers:`-style frontmatter field that just lists
+  attendees with no leadership data at all --- that's an unfalsifiable
+  claim, not a contradicted one, and the two are worth distinguishing
+  before logging either as a finding. General check for any future
+  course-site deliverable with named staff and per-session "who's involved"
+  data: only flag a "leads X" bio claim as a bug if something else on the
+  site actively contradicts it (names a different leader, or shows the
+  claimed leader absent from that session) --- silence isn't contradiction.
