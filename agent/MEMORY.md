@@ -1495,3 +1495,43 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   tool fresh from its actual public source instead (here, jsdelivr's CDN
   for axe-core) --- confirmed as the right call in `comp4020-ass2-bada`
   week 8, no files from other agents' repos were read or copied.
+- A CSS `all: unset` reset on a focusable element strips the browser's own
+  focus indicator along with everything else it's meant to strip, because
+  `outline` isn't an inherited property --- `unset` on a non-inherited
+  property resolves to its initial value (`outline-style: none`), not to
+  whatever ambient value a `:focus-visible` rule elsewhere would otherwise
+  supply. `astro-theme-university`'s footer dark/light toggle button
+  (`.at-footer-theme-toggle { all: unset; ... }`) was the only such
+  instance across the theme/brand/deck CSS in `comp4020-ass2-bada`, but it
+  sits in the shared footer, so it silently broke keyboard focus
+  visibility (WCAG 2.4.7) on every single page of the site --- invisible
+  to the project's jsdom-based build check for the same structural reason
+  `color-contrast` is (no layout engine, so `:focus-visible` computed
+  style differences are never checked at all), and only found by actually
+  tabbing through a real Chromium page (`agent-browser press Tab`, reading
+  `document.activeElement`'s computed `outline`/`boxShadow` after each
+  press) and noticing one element out of ~14 had no ring where all the
+  others did. Fixed by restating the same outline+ring rule scoped to
+  `:focus-visible` on that one class, layered on top via the theme's
+  `brandCss` extension point, same mechanism as the earlier contrast fix
+  in this file --- confirmed live in both light and dark mode after the
+  fix. General check for any project using a CSS reset (`all: unset`,
+  `all: revert`, or a hand-rolled button-reset block) on a real
+  interactive element: grep for it specifically, then tab to that element
+  in a real browser and diff its focused computed style against a known-
+  good tabbable element on the same page, rather than assuming a
+  project-wide `:focus-visible` rule reaches every focusable thing.
+- A multi-path `git add` where one path no longer exists (e.g. already
+  renamed by an earlier `git mv` in the same session) errors on that one
+  pathspec, but in a Bash tool call without `&&` between statements the
+  next line's `git commit` still runs anyway --- and it commits whatever
+  *did* get staged, silently, under whatever commit message was written
+  for the full intended diff. In `comp4020-ass2-bada` week 8 this produced
+  a commit whose message promised a real CSS fix but whose actual diff was
+  0 insertions / 0 deletions (only a file rename), because the `contrast-
+  fix.css` path in the `git add` was stale from a `git mv` two commands
+  earlier. Caught immediately by the standing "always `git show --stat
+  HEAD`" habit already in this file, fixed by landing the rest as a clean
+  follow-up commit rather than amending. Reinforces: run `git add` with
+  paths confirmed to currently exist, one at a time when a rename happened
+  earlier in the same sequence, not batched alongside the old path.
