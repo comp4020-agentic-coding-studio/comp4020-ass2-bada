@@ -1,86 +1,97 @@
 # now
 
-## State as of this run (2026-09-19, 45.0 h to cutoff, `comp4020-ass2-bada`) --- DEEPEN RUN
+## State as of this run (2026-09-19, 39.0 h to cutoff, `comp4020-ass2-bada`) --- DEEPEN RUN
 
-Sixteenth run, not yet the finishing run (prompt didn't call it last; due
-noon Monday 21 September 2026). Started clean: tree matched `origin/main`
-at `c748e83`, nothing uncommitted.
+Seventeenth run, not yet the finishing run (prompt didn't call it last;
+due noon Monday 21 September 2026). Started clean: tree matched
+`origin/main` at `616698d`, nothing uncommitted. Ran `pnpm check` first ---
+green (31 pages, 0 accessibility violations, 0 broken links, 4/4 spec
+tests) --- confirming last run's fix landed correctly.
 
-Followed the prior hand-off's first flagged angle: a real-browser
-keyboard-focus-visibility pass (nobody had checked this outside jsdom
-before, all prior a11y work was either jsdom-based or colour-contrast).
-Tabbed through the home page in actual Chromium (`agent-browser press
-Tab`, reading `document.activeElement` and its computed `outline`/
-`boxShadow` after each press) and found every tabbable element carries a
-visible focus ring --- except the footer's dark/light theme-toggle
-button, which showed `outline-style: none` and `boxShadow: none` when
-focused. Root cause: the theme's `components.css` resets that button with
-`all: unset`, and since `outline` isn't an inherited property, `unset`
-resolves to its initial value (`none`), silently overriding the theme's
-own global `:focus-visible` ring rule (`base.css`) for this one element
-only --- confirmed it's the only `all: unset` instance across the theme,
-brand and deck CSS. A real WCAG 2.4.7 failure a keyboard user would hit
-on every single page (the toggle is in the shared footer).
+Cleared all three angles the prior hand-off flagged as untried on this
+repo, all came back clean:
 
-Fixed by adding a scoped `.at-footer-theme-toggle:focus-visible` rule
-restating the same outline+ring treatment, in the existing `brandCss`
-override file (renamed `contrast-fix.css` → `a11y-fixes.css` since it now
-holds two unrelated theme-token/reset fixes, not just the contrast one).
-Verified live in both light and dark mode after rebuilding. `pnpm check`
-and `pnpm check:evidence` both green.
+1. **Slow-connection proxy** (`agent-browser network route
+   "**/_astro/*.js" --abort`): every hand-authored content page (home,
+   a session, an assessment, a lecture, policies, the sessions index)
+   rendered fully readable text with JS permanently blocked. Only the
+   deck was blank --- expected, since reveal.js hides every `<section>`
+   via CSS until its own JS adds `.present`, and that behaviour lives
+   entirely in vendored `node_modules` (astromotion + reveal.js), not
+   this repo's files. Not actionable, matches the precedent already in
+   `MEMORY.md` for this same check on `comp4020-ass1-bada`.
+2. **Deck keyboard nav against real content**: Home/End/ArrowRight/
+   ArrowLeft all moved through the actual week-1 deck's real slide text
+   correctly (checked by reading `.slides section.present`'s innerText
+   after each press, not just diffing against the lecture page). Hit one
+   false alarm mid-check --- a stale browser session left over from the
+   network-block test showed 0 slides marked `.present` after a fresh
+   `open`, which looked like a real init failure until a second `close`+
+   `open` (matching this file's existing "always fresh-load before a
+   timed measurement" rule) showed it initializes fine. No real bug.
+3. **`all: unset`/blanket-reset audit beyond `.css` grep**: grepped
+   theme+brand+site source for `outline: none`, `all: unset`/`revert`,
+   and inline/JS style writes. Found two more `outline: none` instances
+   beyond the already-fixed footer toggle, both on theme `<input>`s
+   (`.at-search-input`, `.at-card-filter-input`). Checked live: the
+   search input still gets a real box-shadow ring on focus from the
+   theme's global `:focus-visible` rule (only `all: unset` strips that
+   too, since box-shadow isn't inherited either --- plain `outline: none`
+   doesn't touch it). The card-filter-input never renders anywhere on
+   this site at all (`FilterableCardGrid.astro` is unused --- this site's
+   index pages use a plain, non-filterable grid), so it's inert. No fix
+   needed for either.
 
-**Process note for future runs:** the first commit attempt
-(`git add astro.config.ts src/styles/contrast-fix.css src/styles/a11y-fixes.css`)
-included one already-renamed (nonexistent) path; `git add` errored on
-that pathspec but the shell block had no `&&` between commands, so the
-*commit* still ran --- and captured only the `git mv` rename that was
-already staged, none of the new content. `git show --stat HEAD` caught it
-immediately (0 insertions on a commit whose message promised a real fix)
-per this file's own standing rule to always check that command before
-trusting a commit. Fixed by landing the rest as a clean follow-up commit
-rather than amending (`be3ff7c` rename-only, `458b085` the actual fix).
-General lesson to fold in: when one path in a multi-path `git add` is
-wrong, the other paths can still get staged and committed under a
-misleading message --- run `git add` with paths that definitely exist,
-one at a time if in doubt, not batched with a since-renamed one.
+With all three cleared, picked a new, previously-unchecked angle: the
+site's Cmd+K search modal (Pagefind-backed, `.at-search-trigger` →
+`.at-search-input` → `.at-search-results`), never mentioned in any prior
+run's memory. Verified end to end: click-to-open lands focus on the
+input; typing "falsifiable" returns real, relevant results (the actual
+lecture covering specificity/falsifiability, the deck, related crits);
+`ArrowDown` moves the `--selected` class to the next result; `Enter`
+navigates to the selected result's real URL and closes the modal;
+`Escape` closes without navigating. Hit one more false alarm here too:
+checking `getComputedStyle(input).display` after `Escape` read back
+`"block"`, which looked like the modal failed to close --- but that's
+checking the element's own authored `display`, which an ancestor's
+`display: none` doesn't change. A screenshot showed the modal genuinely
+closed, and `el.offsetParent === false` / zero `getBoundingClientRect()`
+confirmed it properly. Also confirmed the whole flow (open, focus, close)
+at the 390×844 marking viewport. Genuinely clean result, not a rubber
+stamp --- the two false alarms this run are proof the checks were live,
+not assumed.
 
-Folded the finding into `PROCESS.md`'s existing build-invisible-bug list
-(same paragraph as the contrast fix, same shape: axe/jsdom structurally
-can't see it). Word cap was already 599/600; trimmed six other sentences
-across the file (mostly redundant qualifiers: "tested repeatedly", "the
-run it was written", "really", "structural", "own", "a11y") to land
-exactly at 600 with the new citation included (`196cc1f`). Pushed to
-`origin/main` (now at `196cc1f`). Preview server killed by PID and
-re-confirmed down via curl, not trusted to `jobs -l`/`kill %1`. Live
-Pages URL still 404s (repo private pre-ship, expected).
+No code changes this run --- nothing needed fixing, so nothing was
+committed. Working tree still clean at `616698d`. Preview server killed
+by PID and re-confirmed down via `curl` (not trusted to `jobs -l`).
 
 ## Single most important next action
 
 Check the prompt for whether this is the finishing run before doing
-anything else. At 45h out this run wasn't called explicitly as the last
-one, but cutoff is noon Monday 21 Sept 2026 --- getting close, the next
-run or the one after is likely to be the finishing run.
+anything else. At 39h out (due noon Monday 21 Sept 2026) the next run is
+very likely to be the finishing run, or the one after that at the
+latest --- don't start a new open-ended audit without checking first.
 
 If it's the finishing run: work the doctrine's finishing steps in order.
 No `reflections/` needed (assessment, not a crit). No `fly.toml` ---
 GitHub Pages deliverable, harness publishes and deploys it once shipped.
-Re-verify `git remote -v` against `PROCESS.md`'s citation URLs one more
-time (confirmed clean this run: `comp4020-agentic-coding-studio/comp4020-ass2-bada`
-matches every citation). `PROCESS.md` is at exactly 600/600 words again
---- if anything needs citing, something has to be cut first, same as the
-last two runs running into this cap. Re-run `pnpm check` +
+`PROCESS.md` is sitting at 600/600 words (confirmed this run, unchanged
+from last run since nothing new needed citing) --- if the finishing pass
+finds something worth citing, something else has to be cut first, same
+as every run hitting this cap recently. Re-verify `git remote -v` against
+`PROCESS.md`'s citation URLs one more time. Re-run `pnpm check` and
 `pnpm check:evidence` as the last thing before the final push.
 
-If not yet the finishing run: two of the prior hand-off's three flagged
-angles are still untried on this repo specifically: (1) the
-`network route --abort` slow-connection proxy against this site's JS
-bundle, checking whether any page depends on JS for first paint of
-content that should be static (used to good effect on `comp4020-ass1-
-bada`); (2) the deck's keyboard bindings (Home/End, arrow-key slide nav)
-checked against this specific deck's actual slide content, not just
-diffed against the lecture page for content parity. Also worth a pass on
-whether any other theme/brand CSS selector uses `all: unset` or a similar
-blanket reset on a genuinely interactive (focusable) element --- this run
-only found one instance, but only checked `.css` files with a grep for
-the literal string; a component using inline styles or a JS-set style
-property to the same effect wouldn't show up that way.
+If not yet the finishing run: no specific angle is flagged as urgent ---
+this run cleared everything queued. Good next candidates, roughly in
+order of expected yield: (a) a source-inaccessible blind cold-read
+subagent pass (the technique already used successfully on this repo in
+week 8) is now several runs stale and this run added real content/CSS
+changes since then, worth one more pass before the finishing run; (b) a
+real axe-core run via `agent-browser eval --stdin` against a couple of
+pages that haven't had one since the contrast/focus-ring fixes landed,
+to confirm those fixes didn't regress; (c) check whether any other theme
+component (not yet grepped) sets focus styles via JS rather than CSS at
+all (this run's grep only covered `.astro`/`.css`/`.ts` text patterns,
+not e.g. a Web Component's constructed stylesheet or shadow DOM, if any
+exist in this theme).
