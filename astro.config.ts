@@ -22,10 +22,11 @@ export default defineConfig({
       defaultLayout: "src/layouts/PageLayout.astro",
       // The whole brand choice: three colour tokens and a set of lockups. Keep
       // institutional brand packages and assets out of this fictional site.
-      // contrast-fix.css loads after slop.css and re-darkens the two
-      // semantic tokens the theme forgot to for light mode --- see the file
-      // for why.
-      brandCss: ["astro-theme-slop/slop.css", "/src/styles/contrast-fix.css"],
+      // a11y-fixes.css loads after slop.css: re-darkens two semantic tokens
+      // the theme forgot to for light mode, and restores a focus-visible
+      // ring the theme's own `all: unset` reset strips from one button ---
+      // see the file for why.
+      brandCss: ["astro-theme-slop/slop.css", "/src/styles/a11y-fixes.css"],
       imageFormat: "avif",
       llmsTxt: true,
       // The theme owns the markdown plugin chain, so astromotion's slide

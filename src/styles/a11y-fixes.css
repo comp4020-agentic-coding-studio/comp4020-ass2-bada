@@ -13,3 +13,17 @@
   --at-heading: light-dark(oklch(from var(--at-primary) calc(l - 0.1) c h), var(--at-primary));
   --at-accent: light-dark(oklch(from var(--at-primary) calc(l - 0.1) c h), var(--at-primary));
 }
+
+/* The theme's footer theme-toggle button resets itself with `all: unset`
+ * (components.css), which --- because `outline` isn't an inherited property
+ * --- also zeroes it back to `outline-style: none`, silently overriding the
+ * theme's own global `:focus-visible` outline+ring rule (base.css) whenever
+ * this specific button is focused. Confirmed live: every other tabbable
+ * element on the site shows the ring, this one shows nothing at all. Restate
+ * the same focus-visible treatment scoped to this button, after the reset.
+ */
+.at-footer-theme-toggle:focus-visible {
+  outline: 2px solid var(--at-accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--at-bg);
+}
